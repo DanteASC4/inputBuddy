@@ -1,6 +1,6 @@
 <script lang="ts">
+  import { recommendedLabels } from '@/lib/data';
   import { onMount } from 'svelte';
-  import labelCounts from '../../../label_counts.json';
   import AnswerForm from '../../lib/components/AnswerForm.svelte';
   import AnswerList from '../../lib/components/AnswerList.svelte';
   import AutofillSettings from '../../lib/components/AutofillSettings.svelte';
@@ -12,19 +12,13 @@
     updateSettings,
     upsertAnswer,
   } from '../../lib/storage';
-  import type {
-    Answer,
-    LabelSuggestion,
-    MatchMode,
-    Settings,
-  } from '../../lib/types';
+  import type { Answer, MatchMode, Settings } from '../../lib/types';
 
   let answers = $state<Answer[]>([]);
   let settings = $state<Settings>({ enabled: true, matchMode: 'partial' });
   let newLabel = $state('');
   let newValue = $state('');
   let filter = $state('');
-  let suggestions = $state<LabelSuggestion[]>([]);
   let isSaving = $state(false);
   let saveError = $state('');
 
@@ -90,19 +84,16 @@
   onMount(async () => {
     settings = await getSettings();
     await refreshAnswers();
-    suggestions = (labelCounts as [string, number][])
-      .slice(0, 24)
-      .map(([label, count]) => ({ label, count }));
   });
 </script>
 
 <main class="min-h-full w-full p-4 text-sm">
   <header class="mb-4">
-    <div class="text-xs uppercase tracking-[0.24em]">
+    <div class="text-xs text-primary uppercase tracking-[0.24em]">
       InputBuddy
     </div>
     <h1 class="text-2xl font-semibold">Autofill your repeat answers</h1>
-    <p class="mt-1">
+    <p class="mt-1 text-xs italic text-neutral-content opacity-70">
       Save common answers once, then reuse them across job application forms.
     </p>
   </header>
@@ -112,7 +103,7 @@
     {newValue}
     {isSaving}
     {saveError}
-    {suggestions}
+    suggestions={recommendedLabels}
     onSave={saveAnswer}
     onSuggestionClick={applySuggestion}
   />

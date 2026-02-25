@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { AnswerFormProps, LabelSuggestion } from '../types';
+  import type { AnswerFormProps } from '../types';
 
   let {
     newLabel = $bindable(''),
@@ -12,17 +12,17 @@
   }: AnswerFormProps = $props();
 </script>
 
-{#snippet suggestionButton(suggestion: LabelSuggestion)}
+{#snippet suggestionButton(suggestion: string)}
   <button
-    onclick={() => onSuggestionClick(suggestion.label)}
+    onclick={() => onSuggestionClick(suggestion)}
     class="btn btn-outline btn-sm"
   >
-    {suggestion.label}
+    {suggestion}
   </button>
 {/snippet}
 
 <section
-  class="mt-4 rounded-2xl border border-neutral bg-base-100/80 p-4 shadow-sm"
+  class="my-4 rounded-2xl border border-neutral bg-base-100/80 p-4 shadow-sm"
 >
   <h2 class="text-sm font-semibold">Add an answer</h2>
   <div class="mt-3 grid gap-2">
@@ -51,7 +51,7 @@
       Suggested labels
     </div>
     <div class="mt-2 flex flex-wrap gap-2">
-      {#each suggestions as suggestion (suggestion.label)}
+      {#each suggestions as suggestion, i (suggestion)}
         {@render suggestionButton(suggestion)}
       {/each}
     </div>

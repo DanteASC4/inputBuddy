@@ -12,11 +12,6 @@ export type Settings = {
   matchMode: MatchMode;
 };
 
-export type LabelSuggestion = {
-  label: string;
-  count: number;
-};
-
 export type AutofillSettingsProps = {
   enabled: boolean;
   matchMode: MatchMode;
@@ -29,7 +24,7 @@ export type AnswerFormProps = {
   newValue: string;
   isSaving: boolean;
   saveError: string;
-  suggestions: LabelSuggestion[];
+  suggestions: readonly string[];
   /* onLabelChange: (value: string) => void;
   onValueChange: (value: string) => void; */
   onSave: () => void;

@@ -1,0 +1,17 @@
+export const recommendedLabels = [
+  'First Name',
+  'Last Name',
+  'Email',
+  'LinkedIn Profile',
+  'Github',
+  'Website',
+  'Are you authorized to work in the United States?',
+  'City',
+  'Country',
+  'Current company',
+  'How did you hear about this job?',
+  'Are you open to relocating for this position?',
+  'Phone Number',
+  'Require Sponsorship?',
+  'Anything else?',
+] as const;
