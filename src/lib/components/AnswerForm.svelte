@@ -1,20 +1,20 @@
 <script lang="ts">
+  import { Appstate } from '$lib/state.svelte';
   import type { AnswerFormProps } from '@types';
 
-  let {
-    newLabel = $bindable(''),
-    newValue = $bindable(''),
-    isSaving,
-    saveError,
-    suggestions,
-    onSave,
-    onSuggestionClick,
-  }: AnswerFormProps = $props();
+  let { suggestions }: AnswerFormProps = $props();
+
+  let newLabel = $state('');
+  let newValue = $state('');
+
+  function applySuggestion(suggestion: string) {
+    newLabel = suggestion;
+  }
 </script>
 
 {#snippet suggestionButton(suggestion: string)}
   <button
-    onclick={() => onSuggestionClick(suggestion)}
+    onclick={() => applySuggestion(suggestion)}
     class="btn btn-outline btn-sm"
   >
     {suggestion}
@@ -36,13 +36,13 @@
     <button
       type="button"
       class="btn btn-primary"
-      onclick={onSave}
-      disabled={isSaving || !newLabel.trim() || !newValue.trim()}
+      onclick={() => Appstate.saveAnswer(newLabel, newValue)}
+      disabled={Appstate.isSaving || !newLabel.trim() || !newValue.trim()}
     >
       Save answer
     </button>
-    {#if saveError}
-      <div class="text-xs text-red-600">{saveError}</div>
+    {#if Appstate.saveError}
+      <div class="text-xs text-red-600">{Appstate.saveError}</div>
     {/if}
   </div>
 

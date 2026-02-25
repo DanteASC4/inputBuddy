@@ -1,89 +1,13 @@
 <script lang="ts">
+  import { Appstate } from '$lib/state.svelte';
   import AnswerForm from '@c/AnswerForm.svelte';
   import AnswerList from '@c/AnswerList.svelte';
   import AutofillSettings from '@c/AutofillSettings.svelte';
-  import type { Answer, MatchMode, Settings } from '@types';
   import { recommendedLabels } from '@u/data';
-  import { normalizeText } from '@u/matching';
-  import {
-    deleteAnswer,
-    getAnswers,
-    getSettings,
-    updateSettings,
-    upsertAnswer,
-  } from '@u/storage';
   import { onMount } from 'svelte';
 
-  let answers = $state<Answer[]>([]);
-  let settings = $state<Settings>({ enabled: true, matchMode: 'partial' });
-  let newLabel = $state('');
-  let newValue = $state('');
-  let filter = $state('');
-  let isSaving = $state(false);
-  let saveError = $state('');
-
-  const filteredAnswers = $derived.by(() => {
-    if (!filter.trim()) return answers;
-    const query = normalizeText(filter);
-    return answers.filter((answer) =>
-      normalizeText(answer.label).includes(query),
-    );
-  });
-
-  const refreshAnswers = async () => {
-    answers = await getAnswers();
-  };
-
-  const saveAnswer = async () => {
-    if (!newLabel.trim() || !newValue.trim()) return;
-    isSaving = true;
-    saveError = '';
-
-    try {
-      answers = await upsertAnswer(newLabel, newValue);
-      newLabel = '';
-      newValue = '';
-    } catch (error) {
-      console.error('Failed to save answer.', error);
-      saveError = 'Something went wrong while saving.';
-    } finally {
-      isSaving = false;
-    }
-  };
-
-  const removeAnswer = async (id: string) => {
-    answers = await deleteAnswer(id);
-  };
-
-  const handleEnabledChange = async (enabled: boolean) => {
-    settings = await updateSettings({ enabled });
-  };
-
-  const handleMatchModeChange = async (matchMode: MatchMode) => {
-    settings = await updateSettings({ matchMode });
-  };
-
-  const applySuggestion = (label: string) => {
-    newLabel = label;
-  };
-
-  const handleLabelChange = (value: string) => {
-    newLabel = value;
-    if (saveError) saveError = '';
-  };
-
-  const handleValueChange = (value: string) => {
-    newValue = value;
-    if (saveError) saveError = '';
-  };
-
-  const handleFilterChange = (value: string) => {
-    filter = value;
-  };
-
   onMount(async () => {
-    settings = await getSettings();
-    await refreshAnswers();
+    await Appstate.init();
   });
 </script>
 
@@ -98,28 +22,9 @@
     </p>
   </header>
 
-  <AnswerForm
-    {newLabel}
-    {newValue}
-    {isSaving}
-    {saveError}
-    suggestions={recommendedLabels}
-    onSave={saveAnswer}
-    onSuggestionClick={applySuggestion}
-  />
+  <AnswerForm suggestions={recommendedLabels} />
 
-  <AutofillSettings
-    enabled={settings.enabled}
-    matchMode={settings.matchMode}
-    onEnabledChange={handleEnabledChange}
-    onMatchModeChange={handleMatchModeChange}
-  />
+  <AutofillSettings />
 
-  <AnswerList
-    answers={filteredAnswers}
-    totalCount={answers.length}
-    {filter}
-    onFilterChange={handleFilterChange}
-    onRemove={removeAnswer}
-  />
+  <AnswerList />
 </main>

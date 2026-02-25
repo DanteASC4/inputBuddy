@@ -12,29 +12,23 @@ export type Settings = {
   matchMode: MatchMode;
 };
 
-export type AutofillSettingsProps = {
-  enabled: boolean;
-  matchMode: MatchMode;
-  onEnabledChange: (next: boolean) => void;
-  onMatchModeChange: (next: MatchMode) => void;
-};
+export type AutofillSettingsProps = {};
 
 export type AnswerFormProps = {
-  newLabel: string;
-  newValue: string;
-  isSaving: boolean;
-  saveError: string;
   suggestions: readonly string[];
-  /* onLabelChange: (value: string) => void;
-  onValueChange: (value: string) => void; */
-  onSave: () => void;
-  onSuggestionClick: (label: string) => void;
 };
 
-export type AnswerListProps = {
+export type AnswerListProps = {};
+
+export type AppState = {
   answers: Answer[];
-  totalCount: number;
-  filter: string;
-  onFilterChange: (value: string) => void;
-  onRemove: (id: string) => void;
+  settings: Settings;
+  isSaving: boolean;
+  saveError: string;
+  loadAnswers: () => Promise<void>;
+  loadSettings: () => Promise<void>;
+  init: () => Promise<void>;
+  saveAnswer: (label: string, value: string) => Promise<void>;
+  removeAnswer: (id: string) => Promise<void>;
+  changeSettings: (settings: Partial<Settings>) => Promise<void>;
 };

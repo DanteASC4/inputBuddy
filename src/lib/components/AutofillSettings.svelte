@@ -1,25 +1,36 @@
 <script lang="ts">
-  import type { AutofillSettingsProps } from '@types';
+  import { Appstate } from '$lib/state.svelte';
+  // import type { AutofillSettingsProps } from '@types';
 
-  let {
-    enabled = $bindable(),
-    matchMode = $bindable(),
-    onEnabledChange,
-    onMatchModeChange,
-  }: AutofillSettingsProps = $props();
+  // let {}: AutofillSettingsProps = $props();
+
+  let enabled = $state(Appstate.settings.enabled);
+  let matchMode = $state(Appstate.settings.matchMode);
+
+  function updateEnabled(_event: Event) {
+    Appstate.changeSettings({ enabled });
+  }
+
+  function updateMatchMode(_event: Event) {
+    Appstate.changeSettings({ matchMode });
+  }
 </script>
 
 <section class="rounded-2xl border border-neutral bg-base-100/80 p-4 shadow-sm">
   <div class="flex items-center justify-between">
     <div>
-      <div class="text-sm font-semibold uppercase tracking-[0.2em] text-neutral-content">Autofill</div>
+      <div
+        class="text-sm font-semibold uppercase tracking-[0.2em] text-neutral-content"
+      >
+        Autofill
+      </div>
       <div class="text-xs text-neutral-content opacity-70">
         Fill matching labels on detected forms.
       </div>
     </div>
     <input
       bind:checked={enabled}
-      onchange={() => onEnabledChange(enabled)}
+      onchange={updateEnabled}
       type="checkbox"
       class="toggle toggle-secondary"
     />
@@ -36,7 +47,7 @@
       <label class="flex gap-2 cursor-pointer items-center">
         <input
           bind:group={matchMode}
-          onchange={() => onMatchModeChange(matchMode)}
+          onchange={updateMatchMode}
           value="exact"
           type="radio"
           class="radio radio-sm radio-secondary"
@@ -51,7 +62,7 @@
       <label class="flex gap-2 cursor-pointer items-center">
         <input
           bind:group={matchMode}
-          onchange={() => onMatchModeChange(matchMode)}
+          onchange={updateMatchMode}
           value="partial"
           type="radio"
           class="radio radio-sm radio-secondary"
@@ -67,7 +78,7 @@
       <label class="flex gap-2 cursor-pointer items-center">
         <input
           bind:group={matchMode}
-          onchange={() => onMatchModeChange(matchMode)}
+          onchange={updateMatchMode}
           value="suggest"
           type="radio"
           class="radio radio-sm radio-secondary"

@@ -5,7 +5,8 @@
     "paths": {
       "@c/*": ["./src/lib/components/*"],
       "@u/*": ["./src/lib/utils/*"],
-      "@types": ["./src/lib/types.ts"]
+      "@types": ["./src/lib/types.ts"],
+      "$lib/*": ["./src/lib/*"]
     }
   }
 }
