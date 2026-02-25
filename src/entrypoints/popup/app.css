@@ -1,0 +1,18 @@
+@import 'tailwindcss';
+@plugin 'daisyui' {
+  themes: abyss --default;
+}
+
+body {
+  margin: 0;
+  min-width: 360px;
+  min-height: 520px;
+  font-family:
+    'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', 'Palatino', serif;
+  /* background: radial-gradient(circle at top, #f5f1e9, #ece7de 60%, #e4ddd2); */
+  /* color: #1f1f1f; */
+}
+
+#app {
+  min-height: 100vh;
+}
