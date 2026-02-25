@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { AnswerListProps } from '../types';
+  import type { AnswerListProps } from '@types';
 
   let {
     answers,

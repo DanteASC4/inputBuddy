@@ -1,4 +1,4 @@
-import type { Answer, MatchMode } from './types';
+import type { Answer, MatchMode } from '@types';
 
 export type MatchResult = {
   answer: Answer;

@@ -1,6 +1,6 @@
 import { browser } from 'wxt/browser';
-import { findMatchingAnswer } from '../lib/matching';
-import { getAnswers, getSettings } from '../lib/storage';
+import { findMatchingAnswer } from '@u/matching';
+import { getAnswers, getSettings } from '@u/storage';
 
 const INPUT_SELECTOR =
   'input[type="text"], input[type="email"], input[type="tel"], input[type="url"], input[type="search"], textarea';

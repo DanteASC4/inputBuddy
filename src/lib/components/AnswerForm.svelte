@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { AnswerFormProps } from '../types';
+  import type { AnswerFormProps } from '@types';
 
   let {
     newLabel = $bindable(''),

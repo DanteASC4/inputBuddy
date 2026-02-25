@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { AutofillSettingsProps } from '../types';
+  import type { AutofillSettingsProps } from '@types';
 
   let {
     enabled = $bindable(),

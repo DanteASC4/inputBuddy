@@ -1,5 +1,5 @@
 import { browser } from 'wxt/browser';
-import type { Answer, Settings } from './types';
+import type { Answer, Settings } from '@types';
 
 const STORAGE_KEYS = {
   answers: 'answers',

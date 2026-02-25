@@ -1,18 +1,18 @@
 <script lang="ts">
-  import { recommendedLabels } from '@/lib/data';
-  import { onMount } from 'svelte';
-  import AnswerForm from '../../lib/components/AnswerForm.svelte';
-  import AnswerList from '../../lib/components/AnswerList.svelte';
-  import AutofillSettings from '../../lib/components/AutofillSettings.svelte';
-  import { normalizeText } from '../../lib/matching';
+  import AnswerForm from '@c/AnswerForm.svelte';
+  import AnswerList from '@c/AnswerList.svelte';
+  import AutofillSettings from '@c/AutofillSettings.svelte';
+  import type { Answer, MatchMode, Settings } from '@types';
+  import { recommendedLabels } from '@u/data';
+  import { normalizeText } from '@u/matching';
   import {
     deleteAnswer,
     getAnswers,
     getSettings,
     updateSettings,
     upsertAnswer,
-  } from '../../lib/storage';
-  import type { Answer, MatchMode, Settings } from '../../lib/types';
+  } from '@u/storage';
+  import { onMount } from 'svelte';
 
   let answers = $state<Answer[]>([]);
   let settings = $state<Settings>({ enabled: true, matchMode: 'partial' });
