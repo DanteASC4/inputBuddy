@@ -1,16 +1,86 @@
 @import 'tailwindcss';
-@plugin 'daisyui' {
-  themes: abyss --default;
+@plugin 'daisyui';
+@plugin "daisyui/theme" {
+  name: 'vdark';
+  default: false;
+  prefersdark: false;
+  color-scheme: 'dark';
+  --color-base-100: oklch(0% 0 0);
+  --color-base-200: oklch(19% 0 0);
+  --color-base-300: oklch(22% 0 0);
+  --color-base-content: oklch(87.609% 0 0);
+  --color-primary: oklch(35% 0.28 330.2);
+  --color-primary-content: oklch(100% 0 0);
+  --color-secondary: oklch(35% 0.219 192.8);
+  --color-secondary-content: oklch(100% 0 0);
+  --color-accent: oklch(35% 0.042 265.755);
+  --color-accent-content: oklch(100% 0 0);
+  --color-neutral: oklch(35% 0 0);
+  --color-neutral-content: oklch(100% 0 0);
+  --color-info: oklch(45.201% 0.313 264.052);
+  --color-info-content: oklch(89.04% 0.062 264.052);
+  --color-success: oklch(44.1% 0.266 142.495);
+  --color-success-content: oklch(90.395% 0.035 142.495);
+  --color-warning: oklch(87.3% 0.253 109.769);
+  --color-warning-content: oklch(19.359% 0.042 109.769);
+  --color-error: oklch(44.9% 0.329 29.233);
+  --color-error-content: oklch(12.559% 0.051 29.233);
+  --radius-selector: 1rem;
+  --radius-field: 1rem;
+  --radius-box: 1rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 1;
+  --noise: 1;
+}
+
+@font-face {
+  font-family: 'Crimson Text';
+  font-style: normal;
+  src: url('/fonts/CrimsonText-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Crimson Text';
+  font-style: italic;
+  font-weight: 400;
+  src: url('/fonts/CrimsonText-Italic.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Crimson Text';
+  font-style: normal;
+  font-weight: 600;
+  src: url('/fonts/CrimsonText-SemiBold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Crimson Text';
+  font-style: italic;
+  font-weight: 600;
+  src: url('/fonts/CrimsonText-SemiBoldItalic.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Crimson Text';
+  font-style: normal;
+  font-weight: 700;
+  src: url('/fonts/CrimsonText-Bold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Crimson Text';
+  font-style: italic;
+  font-weight: 700;
+  src: url('/fonts/CrimsonText-BoldItalic.ttf') format('truetype');
 }
 
 body {
   margin: 0;
   min-width: 360px;
   min-height: 520px;
-  font-family:
-    'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', 'Palatino', serif;
-  /* background: radial-gradient(circle at top, #f5f1e9, #ece7de 60%, #e4ddd2); */
-  /* color: #1f1f1f; */
+  font-family: 'Crimson Text', serif;
 }
 
 #app {

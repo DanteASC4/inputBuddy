@@ -1,5 +1,5 @@
 {
-  "name": "wxt-svelte-starter",
+  "name": "InputBuddy",
   "description": "manifest.json description",
   "private": true,
   "version": "0.0.0",
@@ -16,6 +16,7 @@
   },
   "devDependencies": {
     "@tsconfig/svelte": "^5.0.7",
+    "@wxt-dev/auto-icons": "^1.1.1",
     "@wxt-dev/module-svelte": "^2.0.4",
     "daisyui": "^5.5.19",
     "svelte": "^5.49.2",

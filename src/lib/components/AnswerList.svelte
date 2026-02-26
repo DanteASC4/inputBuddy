@@ -2,8 +2,6 @@
   import { Appstate } from '$lib/state.svelte';
   import { normalizeText } from '@u/matching';
 
-  // let { filter = $bindable() }: AnswerListProps = $props();
-
   let filter = $state('');
 
   const filteredAnswers = $derived.by(() => {
@@ -16,14 +14,18 @@
 </script>
 
 <section
-  class="mt-4 rounded-2xl border border-neutral bg-base-100/80 p-4 shadow-sm"
+  class="mt-4 rounded-2xl border border-neutral bg-base-100/80 p-4 shadow-sm focus-within:border-accent hover:border-accent"
 >
   <div class="flex items-center justify-between">
-    <h2 class="text-sm font-semibold">Saved answers</h2>
+    <h2
+      class="text-sm font-semibold uppercase tracking-[0.2em] text-neutral-content"
+    >
+      Saved answers
+    </h2>
     <span class="text-xs text-neutral-500">{Appstate.answers.length}</span>
   </div>
   <input
-    class="mt-3 w-full rounded-xl border border-neutral bg-base-100/80 px-3 py-2 text-xs"
+    class="mt-3 w-full input active:input-primary focus:input-primary"
     placeholder="Filter by label"
     bind:value={filter}
   />

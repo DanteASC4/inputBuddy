@@ -16,7 +16,28 @@
   }
 </script>
 
-<section class="rounded-2xl border border-neutral bg-base-100/80 p-4 shadow-sm">
+{#snippet radioLabel(title: string, subtitle?: string)}
+  {#if subtitle}
+    <p>
+      <span class="text-secondary font-bold brightness-150">
+        {title} <br />
+      </span>
+      <span class="text-xs opacity-70">
+        {subtitle}
+      </span>
+    </p>
+  {:else}
+    <p>
+      <span class="text-secondary font-bold brightness-150">
+        {title}
+      </span>
+    </p>
+  {/if}
+{/snippet}
+
+<section
+  class="rounded-2xl border border-neutral bg-base-100/80 p-4 shadow-sm focus-within:border-accent hover:border-accent"
+>
   <div class="flex items-center justify-between">
     <div>
       <div
@@ -52,12 +73,10 @@
           type="radio"
           class="radio radio-sm radio-secondary"
         />
-        <p>
-          Exact Match <br />
-          <span class="text-xs opacity-70">
-            Only fill when the label text matches exactly.
-          </span>
-        </p>
+        {@render radioLabel(
+          'Exact Match',
+          'Only fill when the label text matches exactly.',
+        )}
       </label>
       <label class="flex gap-2 cursor-pointer items-center">
         <input
@@ -67,13 +86,10 @@
           type="radio"
           class="radio radio-sm radio-secondary"
         />
-        <p>
-          Partial Match <br />
-          <span class="text-xs opacity-70">
-            Use fuzzy matching with a conservative threshold to find close
-            matches.
-          </span>
-        </p>
+        {@render radioLabel(
+          'Partial Match',
+          'Use fuzzy matching with a conservative threshold to find close matches.',
+        )}
       </label>
       <label class="flex gap-2 cursor-pointer items-center">
         <input
@@ -83,13 +99,10 @@
           type="radio"
           class="radio radio-sm radio-secondary"
         />
-        <p>
-          Suggest for every input <br />
-          <span class="text-xs opacity-70">
-            Utilize autocomplete with all saved answers for every detected
-            input.
-          </span>
-        </p>
+        {@render radioLabel(
+          'Suggest for every input',
+          'Utilize autocomplete with all saved answers for every detected input.',
+        )}
       </label>
     </fieldset>
     <!-- <div class="mt-3 grid gap-2 text-xs text-neutral-content">
