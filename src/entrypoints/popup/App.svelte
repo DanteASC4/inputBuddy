@@ -2,7 +2,7 @@
   import { Appstate } from '$lib/state.svelte';
   import AnswerForm from '@c/AnswerForm.svelte';
   import AnswerList from '@c/AnswerList.svelte';
-  import AutofillSettings from '@c/AutofillSettings.svelte';
+  import Settings from '@c/Settings.svelte';
   import { recommendedLabels } from '@u/data';
   import { sigDefault } from '@u/iconpopup';
   import { onMount } from 'svelte';
@@ -20,10 +20,12 @@
   });
 </script>
 
-<main class="min-h-full w-full p-4 text-sm">
+<main id="app" class="min-h-full w-full p-4 text-sm">
   <header class="mb-4">
     <div class="text-xs uppercase tracking-[0.24em] font-bold">
-      <span class="text-primary-content bg-primary px-2 rounded"> InputBuddy </span>
+      <span class="text-primary-content bg-primary px-2 rounded">
+        InputBuddy
+      </span>
     </div>
     <h1 class="text-2xl font-semibold">Autofill your repeat answers</h1>
     <p class="mt-1 text-xs italic text-neutral-content opacity-70">
@@ -32,8 +34,6 @@
   </header>
 
   <AnswerForm suggestions={trueRecommendations} />
-
-  <AutofillSettings />
-
+  <Settings />
   <AnswerList />
 </main>

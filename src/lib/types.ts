@@ -1,3 +1,6 @@
+import { Snippet } from "svelte";
+import { ClassValue } from "svelte/elements";
+
 export type Answer = {
   id: string;
   label: string;
@@ -10,6 +13,7 @@ export type MatchMode = 'exact' | 'partial' | 'suggest';
 export type Settings = {
   enabled: boolean;
   matchMode: MatchMode;
+  keepOpen: boolean;
 };
 
 export type AutofillSettingsProps = {};
@@ -19,6 +23,12 @@ export type AnswerFormProps = {
 };
 
 export type AnswerListProps = {};
+
+export type CollapseWrapperProps = {
+  title: string;
+  children?: Snippet;
+  class?: ClassValue;
+}
 
 export type AppState = {
   answers: Answer[];

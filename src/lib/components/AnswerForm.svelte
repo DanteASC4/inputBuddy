@@ -2,6 +2,7 @@
   import { Appstate } from '$lib/state.svelte';
   import type { AnswerFormProps } from '@types';
   import { fly } from 'svelte/transition';
+  import CollapseWrapper from './CollapseWrapper.svelte';
 
   let { suggestions }: AnswerFormProps = $props();
 
@@ -23,28 +24,21 @@
   </button>
 {/snippet}
 
-<section
-  class="my-4 rounded-2xl border border-neutral bg-base-100/80 p-4 shadow-sm hover:border-accent focus-within:border-accent"
->
-  <h2
-    class="text-sm font-semibold uppercase tracking-[0.2em] text-neutral-content"
-  >
-    Add an answer
-  </h2>
+<CollapseWrapper title="Add an answer">
   <div class="mt-3 grid gap-2">
     <input
       bind:value={newLabel}
-      class="input active:input-primary focus:input-primary"
+      class="input active:input-secondary focus:input-secondary"
       placeholder="Question label (e.g. LinkedIn Profile)"
     />
     <textarea
       bind:value={newValue}
-      class="textarea active:textarea-primary focus:textarea-primary"
+      class="textarea active:textarea-secondary focus:textarea-secondary"
       placeholder="Your answer"
     ></textarea>
     <button
       type="button"
-      class="btn btn-primary"
+      class="btn btn-secondary"
       onclick={() => Appstate.saveAnswer(newLabel, newValue)}
       disabled={Appstate.isSaving || !newLabel.trim() || !newValue.trim()}
     >
@@ -57,7 +51,7 @@
 
   <div class="mt-4">
     <div class="text-xs uppercase tracking-[0.2em] text-neutral-400">
-      Suggested labels
+      Suggested labels / input targets
     </div>
     <div class="mt-2 flex flex-wrap gap-2">
       {#each suggestions as suggestion, i (suggestion)}
@@ -65,4 +59,4 @@
       {/each}
     </div>
   </div>
-</section>
+</CollapseWrapper>

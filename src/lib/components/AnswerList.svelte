@@ -1,6 +1,7 @@
 <script lang="ts">
   import { Appstate } from '$lib/state.svelte';
   import { normalizeText } from '@u/matching';
+  import CollapseWrapper from './CollapseWrapper.svelte';
 
   let filter = $state('');
 
@@ -13,19 +14,15 @@
   });
 </script>
 
-<section
-  class="mt-4 rounded-2xl border border-neutral bg-base-100/80 p-4 shadow-sm focus-within:border-accent hover:border-accent"
->
-  <div class="flex items-center justify-between">
-    <h2
-      class="text-sm font-semibold uppercase tracking-[0.2em] text-neutral-content"
-    >
-      Saved answers
-    </h2>
-    <span class="text-xs text-neutral-500">{Appstate.answers.length}</span>
+<CollapseWrapper title="Saved answers">
+  <div class="flex items-center justify-start mt-4">
+    <div class="text-sm font-semibold uppercase tracking-widest">
+      Saved Count:&nbsp;
+    </div>
+    <div class="badge badge-info font-mono">{Appstate.answers.length}</div>
   </div>
   <input
-    class="mt-3 w-full input active:input-primary focus:input-primary"
+    class="mt-3 w-full input active:input-secondary focus:input-secondary"
     placeholder="Filter by label"
     bind:value={filter}
   />
@@ -59,4 +56,4 @@
       {/each}
     </div>
   {/if}
-</section>
+</CollapseWrapper>

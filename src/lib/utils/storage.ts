@@ -9,6 +9,7 @@ const STORAGE_KEYS = {
 const DEFAULT_SETTINGS: Settings = {
   enabled: true,
   matchMode: 'partial',
+  keepOpen: false,
 };
 
 const normalizeKey = (label: string) => label.trim().toLowerCase();
@@ -91,9 +92,15 @@ export const getSettings = async (): Promise<Settings> => {
   const matchMode = (storedSettings as Settings).matchMode;
   const validMatchMode = isMatchMode(matchMode);
 
+  const keepOpen =
+    typeof (storedSettings as Settings).keepOpen === 'boolean'
+      ? (storedSettings as Settings).keepOpen
+      : DEFAULT_SETTINGS.keepOpen;
+
   return {
     enabled,
     matchMode: validMatchMode ? matchMode : DEFAULT_SETTINGS.matchMode,
+    keepOpen,
   };
 };
 

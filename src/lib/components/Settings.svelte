@@ -1,14 +1,20 @@
 <script lang="ts">
   import { Appstate } from '$lib/state.svelte';
+  import CollapseWrapper from './CollapseWrapper.svelte';
   // import type { AutofillSettingsProps } from '@types';
 
   // let {}: AutofillSettingsProps = $props();
 
   let enabled = $state(Appstate.settings.enabled);
   let matchMode = $state(Appstate.settings.matchMode);
+  let keepOpen = $state(Appstate.settings.keepOpen);
 
   function updateEnabled(_event: Event) {
     Appstate.changeSettings({ enabled });
+  }
+
+  function updateKeepOpen(_event: Event) {
+    Appstate.changeSettings({ keepOpen });
   }
 
   function updateMatchMode(_event: Event) {
@@ -19,10 +25,10 @@
 {#snippet radioLabel(title: string, subtitle?: string)}
   {#if subtitle}
     <p>
-      <span class="text-secondary font-bold brightness-150">
+      <span class="text-secondary font-bold brightness-150 text-base">
         {title} <br />
       </span>
-      <span class="text-xs opacity-70">
+      <span class="text-sm opacity-70">
         {subtitle}
       </span>
     </p>
@@ -35,17 +41,15 @@
   {/if}
 {/snippet}
 
-<section
-  class="rounded-2xl border border-neutral bg-base-100/80 p-4 shadow-sm focus-within:border-accent hover:border-accent"
->
-  <div class="flex items-center justify-between">
+<CollapseWrapper title="Settings" class="space-y-2">
+  <div class="flex items-center justify-between mt-4">
     <div>
       <div
         class="text-sm font-semibold uppercase tracking-[0.2em] text-neutral-content"
       >
         Autofill
       </div>
-      <div class="text-xs text-neutral-content opacity-70">
+      <div class="text-sm text-neutral-content opacity-70">
         Fill matching labels on detected forms.
       </div>
     </div>
@@ -56,6 +60,27 @@
       class="toggle toggle-secondary"
     />
   </div>
+
+  <div class="flex items-center justify-between">
+    <div>
+      <div
+        class="text-sm font-semibold uppercase tracking-[0.2em] text-neutral-content"
+      >
+        Keep open
+      </div>
+      <div class="text-sm text-neutral-content opacity-70">
+        Keep the app sections open at all times.
+      </div>
+    </div>
+    <input
+      bind:checked={keepOpen}
+      onchange={updateKeepOpen}
+      type="checkbox"
+      class="toggle toggle-secondary mt-2"
+    />
+  </div>
+
+  <div class="divider mt-3"></div>
 
   <div class="mt-4">
     <div
@@ -105,52 +130,5 @@
         )}
       </label>
     </fieldset>
-    <!-- <div class="mt-3 grid gap-2 text-xs text-neutral-content">
-      <label class="flex items-start gap-2">
-        <input
-          type="radio"
-          name="match-mode"
-          value="exact"
-          checked={matchMode === 'exact'}
-          onchange={() => onMatchModeChange('exact')}
-        />
-        <span>
-          <span class="block text-sm font-semibold text-neutral-content">
-            Exact match
-          </span>
-          Only fill when the label text matches exactly.
-        </span>
-      </label>
-      <label class="flex items-start gap-2">
-        <input
-          type="radio"
-          name="match-mode"
-          value="partial"
-          checked={matchMode === 'partial'}
-          onchange={() => onMatchModeChange('partial')}
-        />
-        <span>
-          <span class="block text-sm font-semibold text-neutral-content">
-            Partial match
-          </span>
-          Use fuzzy matching with a conservative threshold.
-        </span>
-      </label>
-      <label class="flex items-start gap-2">
-        <input
-          type="radio"
-          name="match-mode"
-          value="suggest"
-          checked={matchMode === 'suggest'}
-          onchange={() => onMatchModeChange('suggest')}
-        />
-        <span>
-          <span class="block text-sm font-semibold text-neutral-content">
-            Suggest for every input
-          </span>
-          Fill the best guess even if confidence is low.
-        </span>
-      </label>
-    </div> -->
   </div>
-</section>
+</CollapseWrapper>

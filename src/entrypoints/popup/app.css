@@ -38,51 +38,66 @@
 @font-face {
   font-family: 'Crimson Text';
   font-style: normal;
-  src: url('/fonts/CrimsonText-Regular.ttf') format('truetype');
+  src: url('/fonts/Crimson_Text/CrimsonText-Regular.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'Crimson Text';
   font-style: italic;
   font-weight: 400;
-  src: url('/fonts/CrimsonText-Italic.ttf') format('truetype');
+  src: url('/fonts/Crimson_Text/CrimsonText-Italic.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'Crimson Text';
   font-style: normal;
   font-weight: 600;
-  src: url('/fonts/CrimsonText-SemiBold.ttf') format('truetype');
+  src: url('/fonts/Crimson_Text/CrimsonText-SemiBold.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'Crimson Text';
   font-style: italic;
   font-weight: 600;
-  src: url('/fonts/CrimsonText-SemiBoldItalic.ttf') format('truetype');
+  src: url('/fonts/Crimson_Text/CrimsonText-SemiBoldItalic.ttf')
+    format('truetype');
 }
 
 @font-face {
   font-family: 'Crimson Text';
   font-style: normal;
   font-weight: 700;
-  src: url('/fonts/CrimsonText-Bold.ttf') format('truetype');
+  src: url('/fonts/Crimson_Text/CrimsonText-Bold.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'Crimson Text';
   font-style: italic;
   font-weight: 700;
-  src: url('/fonts/CrimsonText-BoldItalic.ttf') format('truetype');
+  src: url('/fonts/Crimson_Text/CrimsonText-BoldItalic.ttf') format('truetype');
+}
+
+@layer utilities {
+  .font-mono {
+    font-family: 'Consolas', monospace;
+  }
+}
+
+html,
+body,
+#app {
+  scrollbar-width: none;
 }
 
 body {
   margin: 0;
-  min-width: 360px;
+  min-width: 400px;
   min-height: 520px;
+  height: 100%;
+  overflow: hidden;
   font-family: 'Crimson Text', serif;
 }
 
 #app {
-  min-height: 100vh;
+  overflow-y: auto;
 }
