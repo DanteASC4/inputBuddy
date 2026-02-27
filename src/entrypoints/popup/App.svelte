@@ -2,9 +2,9 @@
   import { Appstate } from '$lib/state.svelte';
   import AnswerForm from '@c/AnswerForm.svelte';
   import AnswerList from '@c/AnswerList.svelte';
+  import ScanNowButton from '@c/ScanNowButton.svelte';
   import Settings from '@c/Settings.svelte';
   import { recommendedLabels } from '@u/data';
-  import { sigDefault } from '@u/iconpopup';
   import { onMount } from 'svelte';
 
   const trueRecommendations = $derived.by(() => {
@@ -16,7 +16,6 @@
 
   onMount(async () => {
     await Appstate.init();
-    await sigDefault();
   });
 </script>
 
@@ -28,10 +27,12 @@
       </span>
     </div>
     <h1 class="text-2xl font-semibold">Autofill your repeat answers</h1>
-    <p class="mt-1 text-xs italic text-neutral-content opacity-70">
+    <p class="mt-1 text-sm italic text-neutral-content opacity-70">
       Save common answers once, then reuse them across job application forms.
     </p>
   </header>
+
+  <ScanNowButton />
 
   <AnswerForm suggestions={trueRecommendations} />
   <Settings />

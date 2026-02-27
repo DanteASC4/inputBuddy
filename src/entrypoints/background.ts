@@ -21,6 +21,7 @@ const setGreenIcon = async () => {
     },
   });
 };
+
 const setDefaultIcon = async () => {
   await browser.action.setIcon({
     path: {
@@ -30,6 +31,10 @@ const setDefaultIcon = async () => {
       128: '/icons/128.png',
     },
   });
+};
+
+const setTitle = async (title: string) => {
+  await browser.action.setTitle({ title });
 };
 
 const isRecommendedDomain = (check: URL | null) => {
@@ -45,14 +50,26 @@ export default defineBackground(() => {
 });
 
 browser.runtime.onMessage.addListener(async (message) => {
-  if (message?.type === 'I_DEFAULT') await setDefaultIcon();
-  if (message?.type === 'I_WARN') await setWarn();
-  if (message?.type === 'I_CLEARWARN') await clearWarnBadge();
-  if (message?.type === 'I_GREEN') await setGreenIcon();
+  if ('type' in message) {
+    if (message.type === 'I_DEFAULT') await setDefaultIcon();
+    if (message.type === 'I_WARN') await setWarn();
+    if (message.type === 'I_CLEARWARN') await clearWarnBadge();
+    if (message.type === 'I_GREEN') await setGreenIcon();
+    if (message.type === 'EXT_TITLE' && 'title' in message) {
+      const title = message.title;
+      await setTitle(title);
+    }
+  }
 });
 
 browser.tabs.onUpdated.addListener(async (tabId, changeInfo) => {
   console.log(changeInfo.url);
   const actual = changeInfo.url ? new URL(changeInfo.url) : null;
-  if(isRecommendedDomain(actual)) await setGreenIcon();
+  if (isRecommendedDomain(actual)) {
+    await setGreenIcon();
+    await setTitle('InputBuddy - Recommended Site');
+  } else {
+    await setDefaultIcon();
+    await setTitle('InputBuddy');
+  }
 });

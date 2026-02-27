@@ -41,8 +41,8 @@
         <div class="rounded-xl border border-neutral bg-base-100/80 px-3 py-2">
           <div class="flex items-start justify-between gap-3">
             <div>
-              <div class="text-sm font-semibold">{answer.label}</div>
-              <div class="mt-1 text-xs text-accent">{answer.value}</div>
+              <div class="text-base font-semibold">{answer.label}</div>
+              <div class="mt-1 text-sm text-accent-content">{answer.value}</div>
             </div>
             <button
               type="button"

@@ -20,7 +20,6 @@ export const isEligibleInput = (
   if (element.disabled || element.readOnly) return false;
   const style = window.getComputedStyle(element);
   if (style.visibility === 'hidden' || style.display === 'none') return false;
-  if (!element.value || !element.value?.trim()) return false;
 
   return true;
 };

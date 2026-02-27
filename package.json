@@ -27,6 +27,8 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.2.0",
+    "animejs": "^4.3.6",
+    "radashi": "^12.7.2",
     "tailwindcss": "^4.2.0"
   }
 }
