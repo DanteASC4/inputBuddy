@@ -12,6 +12,18 @@
       normalizeText(answer.label).includes(query),
     );
   });
+
+  async function updateAnswer(
+    event: Event & {
+      currentTarget: EventTarget & HTMLInputElement;
+    },
+    l: string,
+    id: string,
+  ) {
+    const v = (event.currentTarget as HTMLInputElement).value;
+
+    await Appstate.saveAnswer(l, v, id);
+  }
 </script>
 
 <CollapseWrapper title="Saved answers">
@@ -21,9 +33,13 @@
     </div>
     <div class="badge badge-info font-mono">{Appstate.answers.length}</div>
   </div>
+  <p class="text-xs italic mt-2">
+    Answers are editable and save automatically when changed!
+  </p>
+
   <input
-    class="mt-3 w-full input active:input-secondary focus:input-secondary"
-    placeholder="Filter by label"
+    class="mt-3 w-full input input-sm active:input-secondary focus:input-secondary"
+    placeholder="Start typing to filter by label"
     bind:value={filter}
   />
 
@@ -41,8 +57,17 @@
         <div class="rounded-xl border border-neutral bg-base-100/80 px-3 py-2">
           <div class="flex items-start justify-between gap-3">
             <div>
-              <div class="text-base font-semibold">{answer.label}</div>
-              <div class="mt-1 text-sm text-accent-content">{answer.value}</div>
+              <div class="text-base text-secondary font-semibold">
+                {answer.label}
+              </div>
+              <!-- <div class="mt-1 text-sm text-accent-content">{answer.value}</div> -->
+              <input
+                onchange={(e) => updateAnswer(e, answer.label, answer.id)}
+                type="text"
+                name="answer-editor"
+                class="input mt-1 input-sm"
+                value={answer.value}
+              />
             </div>
             <button
               type="button"

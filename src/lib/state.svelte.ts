@@ -1,14 +1,20 @@
 import { AppState } from '@types';
 import {
   deleteAnswer,
+  deleteProfile,
+  getAnswerProfiles,
   getAnswers,
+  getLastProfile,
   getSettings,
+  saveNewProfile,
+  setLastProfile,
   updateSettings,
   upsertAnswer,
 } from '@u/storage';
 
 export const Appstate = $state<AppState>({
   answers: [],
+  profiles: [],
   settings: {
     enabled: true,
     matchMode: 'partial',
@@ -16,22 +22,39 @@ export const Appstate = $state<AppState>({
   },
   isSaving: false,
   saveError: '',
-  async loadAnswers() {
-    this.answers = await getAnswers();
+  currentProfile: 'default',
+  async loadAnswers(profile?: string) {
+    this.answers = await getAnswers(profile ?? this.currentProfile);
   },
   async loadSettings() {
     this.settings = await getSettings();
   },
-  async init() {
-    await Promise.all([this.loadAnswers(), this.loadSettings()]);
+  async loadProfiles() {
+    this.profiles = await getAnswerProfiles();
   },
-  async saveAnswer(label: string, value: string) {
+  async loadLastProfile() {
+    const lastProfile = await getLastProfile();
+    if (lastProfile && this.profiles.includes(lastProfile)) {
+      await this.switchProfile(lastProfile);
+    } else {
+      await this.switchProfile('default');
+    }
+  },
+  async init() {
+    await Promise.all([
+      this.loadAnswers(),
+      this.loadSettings(),
+      this.loadProfiles(),
+      this.loadLastProfile(),
+    ]);
+  },
+  async saveAnswer(label: string, value: string, id?: string) {
     if (!label.trim() || !value.trim()) return;
     this.isSaving = true;
     this.saveError = '';
 
     try {
-      this.answers = await upsertAnswer(label, value);
+      this.answers = await upsertAnswer(this.currentProfile, label, value, id);
     } catch (error) {
       console.error('Failed to save answer.', error);
       this.saveError = 'Something went wrong while saving.';
@@ -44,7 +67,7 @@ export const Appstate = $state<AppState>({
     this.saveError = '';
 
     try {
-      this.answers = await deleteAnswer(id);
+      this.answers = await deleteAnswer(this.currentProfile, id);
     } catch (error) {
       console.error('Failed to remove answer.', error);
       this.saveError = 'Something went wrong while removing.';
@@ -63,6 +86,41 @@ export const Appstate = $state<AppState>({
       this.saveError = 'Something went wrong while updating settings.';
     } finally {
       this.isSaving = false;
+    }
+  },
+  async switchProfile(profile: string) {
+    this.currentProfile = profile;
+    await this.loadAnswers(profile);
+    await setLastProfile(profile);
+  },
+  async switchsertProfile(profile: string) {
+    if (this.profiles.includes(profile)) {
+      await this.switchProfile(profile);
+    } else {
+      try {
+        const saved = await saveNewProfile(profile);
+        this.profiles = saved;
+        await this.switchProfile(profile);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  },
+  async delProfile(profile: string) {
+    if (!this.profiles.includes(profile)) return;
+    if (profile === 'default') {
+      console.warn('Default profile cannot be deleted.');
+      return;
+    }
+
+    try {
+      const newProfiles = await deleteProfile(profile);
+      this.profiles = newProfiles;
+      if (this.currentProfile === profile) {
+        await this.switchProfile('default');
+      }
+    } catch (err) {
+      console.error(err);
     }
   },
 });
