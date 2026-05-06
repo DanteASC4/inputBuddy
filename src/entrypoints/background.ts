@@ -39,8 +39,8 @@ const setTitle = async (title: string) => {
 
 const isRecommendedDomain = (check: URL | null) => {
   if (!check) return false;
-  const ghReg = /job-boards\.greenhouse\.io$/g;
-  const ahReg = /ashbyhq\.com$/g;
+  const ghReg = /job-boards\.greenhouse\.io$/;
+  const ahReg = /ashbyhq\.com$/;
 
   return ghReg.test(check.hostname) || ahReg.test(check.hostname);
 };
@@ -62,9 +62,15 @@ browser.runtime.onMessage.addListener(async (message) => {
   }
 });
 
-browser.tabs.onUpdated.addListener(async (tabId, changeInfo) => {
-  console.log(changeInfo.url);
-  const actual = changeInfo.url ? new URL(changeInfo.url) : null;
+browser.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
+  console.log(changeInfo.status);
+  if (changeInfo.status !== 'complete') return;
+  console.log('Tab updated:', { tabId, changeInfo });
+  console.log(JSON.stringify(changeInfo));
+
+  const currentUrl = tab.url ?? changeInfo.url ?? null;
+  const actual = currentUrl ? new URL(currentUrl) : null;
+
   if (isRecommendedDomain(actual)) {
     await setGreenIcon();
     await setTitle('InputBuddy - Recommended Site');

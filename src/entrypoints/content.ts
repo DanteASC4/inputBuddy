@@ -1,7 +1,6 @@
-import { Appstate } from '$lib/state.svelte';
 import { fillInput, getLabelCandidates, isEligibleInput } from '@u/eles';
 import { findMatchingAnswer } from '@u/matching';
-import { getAnswers, getSettings } from '@u/storage';
+import { getAnswers, getLastProfile, getSettings } from '@u/storage';
 import { infoLog } from '@u/styled-log';
 import { browser } from 'wxt/browser';
 
@@ -22,11 +21,12 @@ const scheduleScan = () => {
 
 const scanAndFill = async () => {
   const settings = await getSettings();
-  // if (!settings.enabled) return;
+  if (!settings.enabled) return;
 
   infoLog('Got settings:', settings);
 
-  const answers = await getAnswers();
+  const profile = (await getLastProfile()) ?? 'default';
+  const answers = await getAnswers(profile);
   if (!answers.length) return;
 
   infoLog('Got answers:', answers);
@@ -80,19 +80,46 @@ export default defineContentScript({
       observer = null;
     };
 
-    browser.storage.onChanged.addListener((changes, areaName) => {
+    browser.storage.onChanged.addListener(async (changes, areaName) => {
       if (areaName !== 'local') return;
-      if (!Appstate.settings.enabled) return;
-      if (changes.answers || changes.settings) scheduleScan();
+
+      if (changes.settings) {
+        const settings = await getSettings();
+        if (settings.enabled) {
+          startAuto();
+        } else {
+          stopAuto();
+        }
+      }
+
+      if (observer) {
+        if (changes.profiles || changes.lastProfile || changes.default) {
+          scheduleScan();
+          return;
+        }
+
+        const activeProfile = (await getLastProfile()) ?? 'default';
+        if (changes[activeProfile]) {
+          scheduleScan();
+        }
+      }
     });
 
     browser.runtime.onMessage.addListener((msg) => {
-      if ('type' in msg) {
+      console.log('Content script received message:', msg);
+      if (msg && typeof msg === 'object' && 'type' in msg) {
         if (msg.type === 'START_AUTO') startAuto();
         if (msg.type === 'STOP_AUTO') stopAuto();
         if (msg.type === 'SCAN_NOW') scheduleScan();
       }
     });
+
+    void (async () => {
+      const settings = await getSettings();
+      if (settings.enabled) {
+        startAuto();
+      }
+    })();
   },
 });
 // export default defineContentScript({

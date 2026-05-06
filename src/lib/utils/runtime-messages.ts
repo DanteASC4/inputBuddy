@@ -1,5 +1,19 @@
 import { browser } from 'wxt/browser';
 
+const sendToActiveTab = async (message: { type: string }) => {
+  const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
+  if (!tab?.id) return;
+
+  try {
+    await browser.tabs.sendMessage(tab.id, message);
+  } catch (error) {
+    console.warn('Could not deliver message to active tab content script.', {
+      message,
+      error,
+    });
+  }
+};
+
 //? Icon change signals
 export const sigDefault = async () =>
   await browser.runtime.sendMessage({ type: 'I_DEFAULT' });
@@ -12,11 +26,11 @@ export const sigGreen = async () =>
 
 //? Scan signals
 export const sigStartAutoScan = async () =>
-  await browser.runtime.sendMessage({ type: 'START_AUTOSCAN' });
+  await sendToActiveTab({ type: 'START_AUTO' });
 export const sigStopAutoScan = async () =>
-  await browser.runtime.sendMessage({ type: 'STOP_AUTOSCAN' });
+  await sendToActiveTab({ type: 'STOP_AUTO' });
 export const sigScanNow = async () =>
-  await browser.runtime.sendMessage({ type: 'SCAN_NOW' });
+  await sendToActiveTab({ type: 'SCAN_NOW' });
 
 //? Title change signal
 export const sigSetTitle = async (title: string) =>

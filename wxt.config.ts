@@ -7,7 +7,8 @@ export default defineConfig({
   srcDir: 'src',
   modules: ['@wxt-dev/module-svelte', '@wxt-dev/auto-icons'],
   manifest: {
-    permissions: ['storage'],
+    permissions: ['storage', 'tabs'],
+    host_permissions: ['<all_urls>'],
   },
   vite: () => ({
     plugins: [tailwindcss()],
