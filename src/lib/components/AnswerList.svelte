@@ -1,10 +1,12 @@
 <script lang="ts">
-  import { Appstate } from '$lib/state.svelte';
-  import { normalizeText } from '@u/matching';
-  import CollapseWrapper from './CollapseWrapper.svelte';
-  import Subtext from './Subtext.svelte';
+  import { normalizeText } from "@u/matching";
 
-  let filter = $state('');
+  import { Appstate } from "$lib/state.svelte";
+
+  import CollapseWrapper from "./CollapseWrapper.svelte";
+  import Subtext from "./Subtext.svelte";
+
+  let filter = $state("");
 
   const filteredAnswers = $derived.by(() => {
     if (!filter.trim()) return Appstate.answers;
@@ -28,8 +30,8 @@
 </script>
 
 <CollapseWrapper title="Saved answers">
-  <div class="flex items-center justify-start mt-4">
-    <div class="text-sm font-semibold uppercase tracking-widest">
+  <div class="mt-4 flex items-center justify-start">
+    <div class="text-sm font-semibold tracking-widest uppercase">
       Saved Count:&nbsp;
     </div>
     <div class="badge badge-info font-mono">{Appstate.answers.length}</div>
@@ -37,7 +39,7 @@
   <Subtext>Answers are editable and save automatically when changed!</Subtext>
 
   <input
-    class="mt-3 w-full input input-sm active:input-secondary focus:input-secondary"
+    class="input input-sm active:input-secondary focus:input-secondary mt-3 w-full"
     placeholder="Start typing to filter by label"
     bind:value={filter}
   />
@@ -53,11 +55,11 @@
   {:else}
     <div class="mt-4 grid gap-3">
       {#each filteredAnswers as answer (answer.id)}
-        <div class="rounded-xl border border-neutral bg-base-100/80 px-3 py-2">
+        <div class="border-neutral bg-base-100/80 rounded-xl border px-3 py-2">
           <div class="flex items-start justify-between gap-3">
             <div>
               <div
-                class="text-base text-secondary text-shadow-secondary-content font-bold"
+                class="text-secondary text-shadow-secondary-content text-base font-bold"
               >
                 {answer.label}
               </div>
@@ -66,7 +68,7 @@
                 onchange={(e) => updateAnswer(e, answer.label, answer.id)}
                 type="text"
                 name="answer-editor"
-                class="input mt-1 input-sm"
+                class="input input-sm mt-1"
                 value={answer.value}
               />
             </div>

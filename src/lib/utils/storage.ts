@@ -1,6 +1,6 @@
-import type { Answer, Settings } from '@types';
-import { isObject } from 'radashi';
-import { browser } from 'wxt/browser';
+import type { Answer, Settings } from "@types";
+import { isObject } from "radashi";
+import { browser } from "wxt/browser";
 
 //    ▄█    █▄       ▄████████  ▄█          ▄███████▄    ▄████████    ▄████████    ▄████████
 //   ███    ███     ███    ███ ███         ███    ███   ███    ███   ███    ███   ███    ███
@@ -13,23 +13,23 @@ import { browser } from 'wxt/browser';
 //                             ▀                                     ███    ███
 
 const STORAGE_KEYS = {
-  profiles: 'profiles',
-  settings: 'settings',
-  lastProfile: 'lastProfile',
+  profiles: "profiles",
+  settings: "settings",
+  lastProfile: "lastProfile",
 } as const;
 
 const DEFAULT_SETTINGS: Settings = {
   enabled: true,
-  matchMode: 'partial',
+  matchMode: "partial",
   keepOpen: false,
 };
 
-const defaultAnswerProfiles = ['default'];
+const defaultAnswerProfiles = ["default"];
 
 const normalizeKey = (label: string) => label.trim().toLowerCase();
 
-const isMatchMode = (s: string): s is Settings['matchMode'] =>
-  s === 'exact' || s === 'partial' || s === 'suggest';
+const isMatchMode = (s: string): s is Settings["matchMode"] =>
+  s === "exact" || s === "partial" || s === "suggest";
 
 const coerceAnswers = (value: unknown): Answer[] => {
   if (!Array.isArray(value)) return [];
@@ -38,9 +38,9 @@ const coerceAnswers = (value: unknown): Answer[] => {
     if (!isObject(item)) return false;
     const record = item as Answer;
     return (
-      typeof record.id === 'string' &&
-      typeof record.label === 'string' &&
-      typeof record.value === 'string'
+      typeof record.id === "string" &&
+      typeof record.label === "string" &&
+      typeof record.value === "string"
     );
   });
 };
@@ -69,7 +69,7 @@ export const setLastProfile = async (profile: string): Promise<void> => {
 export const getLastProfile = async (): Promise<string | null> => {
   const result = await browser.storage.local.get(STORAGE_KEYS.lastProfile);
   const profile = result[STORAGE_KEYS.lastProfile];
-  return typeof profile === 'string' ? profile : null;
+  return typeof profile === "string" ? profile : null;
 };
 
 export const getAnswerProfiles = async (): Promise<string[]> => {
@@ -86,7 +86,7 @@ export const getAnswerProfiles = async (): Promise<string[]> => {
 
   if (!Array.isArray(stored)) {
     console.error(
-      'Invalid data for answer profiles. Non array saved under storage key.',
+      "Invalid data for answer profiles. Non array saved under storage key.",
     );
     console.log(stored);
     await resetAllStorageKeys();
@@ -96,9 +96,9 @@ export const getAnswerProfiles = async (): Promise<string[]> => {
     return defaultAnswerProfiles;
   }
 
-  if (!stored.every((item) => typeof item === 'string')) {
+  if (!stored.every((item) => typeof item === "string")) {
     console.error(
-      'Invalid data in answer profiles! Expected array of strings.',
+      "Invalid data in answer profiles! Expected array of strings.",
     );
     console.log(stored);
     await resetAllStorageKeys();
@@ -148,7 +148,7 @@ export const deleteProfile = async (profile: string): Promise<string[]> => {
 //                                                                ███    ███
 
 export const getAnswers = async (
-  profile: string = 'default',
+  profile: string = "default",
 ): Promise<Answer[]> => {
   const profiles = await getAnswerProfiles();
   if (!profiles.includes(profile)) {
@@ -167,7 +167,7 @@ export const getAnswers = async (
 
   if (!Array.isArray(stored)) {
     console.error(
-      'Invalid data for answers. Expected array saved under profile key.',
+      "Invalid data for answers. Expected array saved under profile key.",
     );
     console.log(stored);
     await browser.storage.local.set({ [profile]: [] });
@@ -250,16 +250,16 @@ export const deleteAnswer = async (
 export const getSettings = async (): Promise<Settings> => {
   const result = await browser.storage.local.get(STORAGE_KEYS.settings);
   const stored = result[STORAGE_KEYS.settings];
-  const storedSettings = stored && typeof stored === 'object' ? stored : {};
+  const storedSettings = stored && typeof stored === "object" ? stored : {};
   const enabled =
-    typeof (storedSettings as Settings).enabled === 'boolean'
+    typeof (storedSettings as Settings).enabled === "boolean"
       ? (storedSettings as Settings).enabled
       : DEFAULT_SETTINGS.enabled;
   const matchMode = (storedSettings as Settings).matchMode;
   const validMatchMode = isMatchMode(matchMode);
 
   const keepOpen =
-    typeof (storedSettings as Settings).keepOpen === 'boolean'
+    typeof (storedSettings as Settings).keepOpen === "boolean"
       ? (storedSettings as Settings).keepOpen
       : DEFAULT_SETTINGS.keepOpen;
 

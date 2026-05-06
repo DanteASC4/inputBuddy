@@ -1,10 +1,10 @@
-@import 'tailwindcss';
-@plugin 'daisyui';
+@import "tailwindcss";
+@plugin "daisyui";
 @plugin "daisyui/theme" {
-  name: 'vdark';
+  name: "vdark";
   default: false;
   prefersdark: false;
-  color-scheme: 'dark';
+  color-scheme: "dark";
   --color-base-100: oklch(0% 0 0);
   --color-base-200: oklch(19% 0 0);
   --color-base-300: oklch(22% 0 0);
@@ -36,50 +36,50 @@
 }
 
 @font-face {
-  font-family: 'Crimson Text';
+  font-family: "Crimson Text";
   font-style: normal;
-  src: url('/fonts/Crimson_Text/CrimsonText-Regular.ttf') format('truetype');
+  src: url("/fonts/Crimson_Text/CrimsonText-Regular.ttf") format("truetype");
 }
 
 @font-face {
-  font-family: 'Crimson Text';
+  font-family: "Crimson Text";
   font-style: italic;
   font-weight: 400;
-  src: url('/fonts/Crimson_Text/CrimsonText-Italic.ttf') format('truetype');
+  src: url("/fonts/Crimson_Text/CrimsonText-Italic.ttf") format("truetype");
 }
 
 @font-face {
-  font-family: 'Crimson Text';
+  font-family: "Crimson Text";
   font-style: normal;
   font-weight: 600;
-  src: url('/fonts/Crimson_Text/CrimsonText-SemiBold.ttf') format('truetype');
+  src: url("/fonts/Crimson_Text/CrimsonText-SemiBold.ttf") format("truetype");
 }
 
 @font-face {
-  font-family: 'Crimson Text';
+  font-family: "Crimson Text";
   font-style: italic;
   font-weight: 600;
-  src: url('/fonts/Crimson_Text/CrimsonText-SemiBoldItalic.ttf')
-    format('truetype');
+  src: url("/fonts/Crimson_Text/CrimsonText-SemiBoldItalic.ttf")
+    format("truetype");
 }
 
 @font-face {
-  font-family: 'Crimson Text';
+  font-family: "Crimson Text";
   font-style: normal;
   font-weight: 700;
-  src: url('/fonts/Crimson_Text/CrimsonText-Bold.ttf') format('truetype');
+  src: url("/fonts/Crimson_Text/CrimsonText-Bold.ttf") format("truetype");
 }
 
 @font-face {
-  font-family: 'Crimson Text';
+  font-family: "Crimson Text";
   font-style: italic;
   font-weight: 700;
-  src: url('/fonts/Crimson_Text/CrimsonText-BoldItalic.ttf') format('truetype');
+  src: url("/fonts/Crimson_Text/CrimsonText-BoldItalic.ttf") format("truetype");
 }
 
 @layer utilities {
   .font-mono {
-    font-family: 'Consolas', monospace;
+    font-family: "Consolas", monospace;
   }
 }
 
@@ -95,7 +95,7 @@ body {
   min-height: 520px;
   height: 100%;
   overflow: hidden;
-  font-family: 'Crimson Text', serif;
+  font-family: "Crimson Text", serif;
 }
 
 #app {

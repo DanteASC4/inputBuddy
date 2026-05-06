@@ -1,10 +1,11 @@
 <script lang="ts">
-  import { Appstate } from '$lib/state.svelte';
-  import CollapseWrapper from './CollapseWrapper.svelte';
-  import Subtext from './Subtext.svelte';
+  import { Appstate } from "$lib/state.svelte";
+
+  import CollapseWrapper from "./CollapseWrapper.svelte";
+  import Subtext from "./Subtext.svelte";
 
   let selection = $state(Appstate.currentProfile);
-  let newProfileName = $state('');
+  let newProfileName = $state("");
   let busy = $state(false);
 
   async function onchange() {
@@ -18,7 +19,7 @@
     if (busy) return;
     busy = true;
     await Appstate.switchsertProfile(newProfileName);
-    newProfileName = '';
+    newProfileName = "";
     busy = false;
   }
   async function triggerDelete() {
@@ -33,7 +34,7 @@
   <Subtext>
     Save sets of inputs & values under profiles for easy switching & separation!
   </Subtext>
-  <div class="flex flex-row justify-center items-center pt-8">
+  <div class="flex flex-row items-center justify-center pt-8">
     <div class="join">
       <div class="relative">
         {#key Appstate.currentProfile}
@@ -41,9 +42,9 @@
             {onchange}
             bind:value={selection}
             disabled={busy}
-            class="select join-item w-32 active:select-secondary focus-within:select-secondary peer"
+            class="select join-item active:select-secondary focus-within:select-secondary peer w-32"
           >
-            {#each Appstate.profiles as profile}
+            {#each Appstate.profiles as profile, i (i)}
               {@const isCurrent = profile === Appstate.currentProfile}
               <option value={profile} selected={isCurrent} disabled={isCurrent}>
                 {profile}
@@ -66,7 +67,7 @@
           </select>
         {/key}
         <div
-          class="absolute -top-4 left-4 font-bold peer-has-focus-within:opacity-50 transition-opacity"
+          class="absolute -top-4 left-4 font-bold transition-opacity peer-has-focus-within:opacity-50"
         >
           Input Profile
         </div>
@@ -77,7 +78,7 @@
       >
         <input
           bind:value={newProfileName}
-          class="input join-item w-36 active:input-secondary focus:input-secondary"
+          class="input join-item active:input-secondary focus:input-secondary w-36"
           type="text"
           name="new-profile"
           placeholder="Or add a new profile"

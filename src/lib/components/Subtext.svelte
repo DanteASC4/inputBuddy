@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { Snippet } from 'svelte';
-  import type { ClassValue } from 'svelte/elements';
+  import type { Snippet } from "svelte";
+  import type { ClassValue } from "svelte/elements";
 
   type SubtextProps = {
     children?: Snippet;
@@ -10,6 +10,6 @@
   let props: SubtextProps = $props();
 </script>
 
-<p class="text-xs italic mt-2 font-mono {props.class}">
+<p class="mt-2 font-mono text-xs italic {props.class}">
   {@render props.children?.()}
 </p>

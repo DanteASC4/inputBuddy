@@ -1,15 +1,20 @@
 <script lang="ts">
-  import { Appstate } from '$lib/state.svelte';
-  import type { AnswerFormProps } from '@types';
-  import { flip } from 'svelte/animate';
-  import { quintOut } from 'svelte/easing';
-  import { crossfade } from 'svelte/transition';
-  import CollapseWrapper from './CollapseWrapper.svelte';
+  import { flip } from "svelte/animate";
+  import { quintOut } from "svelte/easing";
+  import { crossfade } from "svelte/transition";
+
+  import { Appstate } from "$lib/state.svelte";
+
+  import CollapseWrapper from "./CollapseWrapper.svelte";
+
+  type AnswerFormProps = {
+    suggestions: readonly string[];
+  };
 
   const [send, receive] = crossfade({
-    fallback(node, params) {
+    fallback(node, _params) {
       const style = getComputedStyle(node);
-      const transform = style.transform === 'none' ? '' : style.transform;
+      const transform = style.transform === "none" ? "" : style.transform;
 
       return {
         duration: 600,
@@ -24,13 +29,13 @@
 
   let { suggestions }: AnswerFormProps = $props();
 
-  let newLabel = $state('');
-  let newValue = $state('');
+  let newLabel = $state("");
+  let newValue = $state("");
 
   function applySuggestion(suggestion: string) {
     newLabel = suggestion;
     // Clear value when switching suggestions
-    newValue = '';
+    newValue = "";
   }
 </script>
 
@@ -60,7 +65,7 @@
   </div>
 
   <div class="mt-4">
-    <div class="text-xs uppercase tracking-[0.2em] text-neutral-400">
+    <div class="text-xs tracking-[0.2em] text-neutral-400 uppercase">
       Suggested labels / input targets
     </div>
     <div class="mt-2 flex flex-wrap gap-2">
@@ -70,7 +75,7 @@
           out:send={{ key: i }}
           animate:flip
           onclick={() => applySuggestion(suggestion)}
-          class="btn btn-sm btn-secondary text-xs hover:outline-2 hover:outline-neutral-content"
+          class="btn btn-sm btn-secondary hover:outline-neutral-content text-xs hover:outline-2"
         >
           {suggestion}
         </button>

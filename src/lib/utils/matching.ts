@@ -1,4 +1,4 @@
-import type { Answer, MatchMode } from '@types';
+import type { Answer, MatchMode } from "@types";
 
 export type MatchResult = {
   answer: Answer;
@@ -9,8 +9,8 @@ export type MatchResult = {
 export const normalizeText = (text: string): string => {
   return text
     .toLowerCase()
-    .replace(/[^a-z0-9]+/g, ' ')
-    .replace(/\s+/g, ' ')
+    .replace(/[^a-z0-9]+/g, " ")
+    .replace(/\s+/g, " ")
     .trim();
 };
 
@@ -72,7 +72,7 @@ export const findMatchingAnswer = (
   answers: Answer[],
   mode: MatchMode,
 ): MatchResult | null => {
-  if (mode === 'exact') {
+  if (mode === "exact") {
     for (const candidate of candidates) {
       const normalizedCandidate = normalizeText(candidate);
       if (!normalizedCandidate) continue;

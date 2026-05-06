@@ -1,6 +1,8 @@
 <script lang="ts">
-  import { Appstate } from '$lib/state.svelte';
-  import CollapseWrapper from './CollapseWrapper.svelte';
+  import { Appstate } from "$lib/state.svelte";
+
+  import CollapseWrapper from "./CollapseWrapper.svelte";
+
   // import type { AutofillSettingsProps } from '@types';
 
   // let {}: AutofillSettingsProps = $props();
@@ -25,7 +27,7 @@
 {#snippet radioLabel(title: string, subtitle?: string)}
   {#if subtitle}
     <p>
-      <span class="text-secondary font-bold brightness-150 text-base">
+      <span class="text-secondary text-base font-bold brightness-150">
         {title} <br />
       </span>
       <span class="text-sm opacity-70">
@@ -42,14 +44,14 @@
 {/snippet}
 
 <CollapseWrapper title="Settings" class="space-y-2">
-  <div class="flex items-center justify-between mt-4">
+  <div class="mt-4 flex items-center justify-between">
     <div>
       <div
-        class="text-sm font-semibold uppercase tracking-[0.2em] text-neutral-content"
+        class="text-neutral-content text-sm font-semibold tracking-[0.2em] uppercase"
       >
         Autofill
       </div>
-      <div class="text-sm text-neutral-content opacity-70">
+      <div class="text-neutral-content text-sm opacity-70">
         Fill matching labels on detected forms.
       </div>
     </div>
@@ -64,11 +66,11 @@
   <div class="flex items-center justify-between">
     <div>
       <div
-        class="text-sm font-semibold uppercase tracking-[0.2em] text-neutral-content"
+        class="text-neutral-content text-sm font-semibold tracking-[0.2em] uppercase"
       >
         Keep open
       </div>
-      <div class="text-sm text-neutral-content opacity-70">
+      <div class="text-neutral-content text-sm opacity-70">
         Keep the app sections open at all times.
       </div>
     </div>
@@ -84,13 +86,13 @@
 
   <div class="mt-4">
     <div
-      class="text-sm font-semibold uppercase tracking-[0.2em] text-neutral-content"
+      class="text-neutral-content text-sm font-semibold tracking-[0.2em] uppercase"
     >
       Match behavior
     </div>
 
     <fieldset class="fieldset">
-      <label class="flex gap-2 cursor-pointer items-center">
+      <label class="flex cursor-pointer items-center gap-2">
         <input
           bind:group={matchMode}
           onchange={updateMatchMode}
@@ -99,11 +101,11 @@
           class="radio radio-sm radio-secondary"
         />
         {@render radioLabel(
-          'Exact Match',
-          'Only fill when the label text matches exactly.',
+          "Exact Match",
+          "Only fill when the label text matches exactly.",
         )}
       </label>
-      <label class="flex gap-2 cursor-pointer items-center">
+      <label class="flex cursor-pointer items-center gap-2">
         <input
           bind:group={matchMode}
           onchange={updateMatchMode}
@@ -112,11 +114,11 @@
           class="radio radio-sm radio-secondary"
         />
         {@render radioLabel(
-          'Partial Match',
-          'Use fuzzy matching with a conservative threshold to find close matches.',
+          "Partial Match",
+          "Use fuzzy matching with a conservative threshold to find close matches.",
         )}
       </label>
-      <label class="flex gap-2 cursor-pointer items-center">
+      <label class="flex cursor-pointer items-center gap-2">
         <input
           bind:group={matchMode}
           onchange={updateMatchMode}
@@ -125,8 +127,8 @@
           class="radio radio-sm radio-secondary"
         />
         {@render radioLabel(
-          'Suggest for every input',
-          'Utilize autocomplete with all saved answers for every detected input.',
+          "Suggest for every input",
+          "Utilize autocomplete with all saved answers for every detected input.",
         )}
       </label>
     </fieldset>

@@ -1,23 +1,23 @@
-import { browser } from 'wxt/browser';
+import { browser } from "wxt/browser";
 
 const setWarn = async () => {
   await browser.action.setBadgeText({
-    text: '⚠️',
+    text: "⚠️",
   });
 };
 
 const clearWarnBadge = async () => {
-  await browser.action.setBadgeText({ text: '' });
+  await browser.action.setBadgeText({ text: "" });
 };
 
 const setGreenIcon = async () => {
   await browser.action.setIcon({
     path: {
-      16: '/icon/inputbuddy_green16.png',
-      32: '/icon/inputbuddy_green32.png',
-      48: '/icon/inputbuddy_green48.png',
-      96: '/icon/inputbuddy_green96.png',
-      128: '/icon/inputbuddy_green128.png',
+      16: "/icon/inputbuddy_green16.png",
+      32: "/icon/inputbuddy_green32.png",
+      48: "/icon/inputbuddy_green48.png",
+      96: "/icon/inputbuddy_green96.png",
+      128: "/icon/inputbuddy_green128.png",
     },
   });
 };
@@ -25,10 +25,10 @@ const setGreenIcon = async () => {
 const setDefaultIcon = async () => {
   await browser.action.setIcon({
     path: {
-      16: '/icons/16.png',
-      32: '/icons/32.png',
-      48: '/icons/48.png',
-      128: '/icons/128.png',
+      16: "/icons/16.png",
+      32: "/icons/32.png",
+      48: "/icons/48.png",
+      128: "/icons/128.png",
     },
   });
 };
@@ -46,16 +46,16 @@ const isRecommendedDomain = (check: URL | null) => {
 };
 
 export default defineBackground(() => {
-  console.log('InputBuddy ready!', { id: browser.runtime.id });
+  console.log("InputBuddy ready!", { id: browser.runtime.id });
 });
 
 browser.runtime.onMessage.addListener(async (message) => {
-  if ('type' in message) {
-    if (message.type === 'I_DEFAULT') await setDefaultIcon();
-    if (message.type === 'I_WARN') await setWarn();
-    if (message.type === 'I_CLEARWARN') await clearWarnBadge();
-    if (message.type === 'I_GREEN') await setGreenIcon();
-    if (message.type === 'EXT_TITLE' && 'title' in message) {
+  if ("type" in message) {
+    if (message.type === "I_DEFAULT") await setDefaultIcon();
+    if (message.type === "I_WARN") await setWarn();
+    if (message.type === "I_CLEARWARN") await clearWarnBadge();
+    if (message.type === "I_GREEN") await setGreenIcon();
+    if (message.type === "EXT_TITLE" && "title" in message) {
       const title = message.title;
       await setTitle(title);
     }
@@ -64,8 +64,8 @@ browser.runtime.onMessage.addListener(async (message) => {
 
 browser.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
   console.log(changeInfo.status);
-  if (changeInfo.status !== 'complete') return;
-  console.log('Tab updated:', { tabId, changeInfo });
+  if (changeInfo.status !== "complete") return;
+  console.log("Tab updated:", { tabId, changeInfo });
   console.log(JSON.stringify(changeInfo));
 
   const currentUrl = tab.url ?? changeInfo.url ?? null;
@@ -73,9 +73,9 @@ browser.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
 
   if (isRecommendedDomain(actual)) {
     await setGreenIcon();
-    await setTitle('InputBuddy - Recommended Site');
+    await setTitle("InputBuddy - Recommended Site");
   } else {
     await setDefaultIcon();
-    await setTitle('InputBuddy');
+    await setTitle("InputBuddy");
   }
 });

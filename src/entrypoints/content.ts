@@ -1,8 +1,8 @@
-import { fillInput, getLabelCandidates, isEligibleInput } from '@u/eles';
-import { findMatchingAnswer } from '@u/matching';
-import { getAnswers, getLastProfile, getSettings } from '@u/storage';
-import { infoLog } from '@u/styled-log';
-import { browser } from 'wxt/browser';
+import { fillInput, getLabelCandidates, isEligibleInput } from "@u/eles";
+import { findMatchingAnswer } from "@u/matching";
+import { getAnswers, getLastProfile, getSettings } from "@u/storage";
+import { infoLog } from "@u/styled-log";
+import { browser } from "wxt/browser";
 
 const INPUT_SELECTOR =
   'input[type="text"], input[type="email"], input[type="tel"], input[type="url"], input[type="search"], textarea';
@@ -23,13 +23,13 @@ const scanAndFill = async () => {
   const settings = await getSettings();
   if (!settings.enabled) return;
 
-  infoLog('Got settings:', settings);
+  infoLog("Got settings:", settings);
 
-  const profile = (await getLastProfile()) ?? 'default';
+  const profile = (await getLastProfile()) ?? "default";
   const answers = await getAnswers(profile);
   if (!answers.length) return;
 
-  infoLog('Got answers:', answers);
+  infoLog("Got answers:", answers);
 
   const inputs = Array.from(
     document.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>(
@@ -48,9 +48,9 @@ const scanAndFill = async () => {
     if (!best) continue;
 
     const threshold =
-      settings.matchMode === 'exact'
+      settings.matchMode === "exact"
         ? 1
-        : settings.matchMode === 'partial'
+        : settings.matchMode === "partial"
           ? PARTIAL_MATCH_THRESHOLD
           : 0;
 
@@ -61,7 +61,7 @@ const scanAndFill = async () => {
 };
 
 export default defineContentScript({
-  matches: ['<all_urls>'],
+  matches: ["<all_urls>"],
   main() {
     let observer: MutationObserver | null = null;
     const startAuto = () => {
@@ -81,7 +81,7 @@ export default defineContentScript({
     };
 
     browser.storage.onChanged.addListener(async (changes, areaName) => {
-      if (areaName !== 'local') return;
+      if (areaName !== "local") return;
 
       if (changes.settings) {
         const settings = await getSettings();
@@ -98,7 +98,7 @@ export default defineContentScript({
           return;
         }
 
-        const activeProfile = (await getLastProfile()) ?? 'default';
+        const activeProfile = (await getLastProfile()) ?? "default";
         if (changes[activeProfile]) {
           scheduleScan();
         }
@@ -106,11 +106,11 @@ export default defineContentScript({
     });
 
     browser.runtime.onMessage.addListener((msg) => {
-      console.log('Content script received message:', msg);
-      if (msg && typeof msg === 'object' && 'type' in msg) {
-        if (msg.type === 'START_AUTO') startAuto();
-        if (msg.type === 'STOP_AUTO') stopAuto();
-        if (msg.type === 'SCAN_NOW') scheduleScan();
+      console.log("Content script received message:", msg);
+      if (msg && typeof msg === "object" && "type" in msg) {
+        if (msg.type === "START_AUTO") startAuto();
+        if (msg.type === "STOP_AUTO") stopAuto();
+        if (msg.type === "SCAN_NOW") scheduleScan();
       }
     });
 
