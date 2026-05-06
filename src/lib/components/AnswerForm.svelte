@@ -1,8 +1,26 @@
 <script lang="ts">
   import { Appstate } from '$lib/state.svelte';
   import type { AnswerFormProps } from '@types';
-  import { fly } from 'svelte/transition';
+  import { flip } from 'svelte/animate';
+  import { quintOut } from 'svelte/easing';
+  import { crossfade } from 'svelte/transition';
   import CollapseWrapper from './CollapseWrapper.svelte';
+
+  const [send, receive] = crossfade({
+    fallback(node, params) {
+      const style = getComputedStyle(node);
+      const transform = style.transform === 'none' ? '' : style.transform;
+
+      return {
+        duration: 600,
+        easing: quintOut,
+        css: (t) => `
+					transform: ${transform} scale(${t});
+					opacity: ${t}
+				`,
+      };
+    },
+  });
 
   let { suggestions }: AnswerFormProps = $props();
 
@@ -11,18 +29,10 @@
 
   function applySuggestion(suggestion: string) {
     newLabel = suggestion;
+    // Clear value when switching suggestions
+    newValue = '';
   }
 </script>
-
-{#snippet suggestionButton(suggestion: string, idx: number)}
-  <button
-    transition:fly|global={{ y: 30, duration: 500, delay: 50 * idx }}
-    onclick={() => applySuggestion(suggestion)}
-    class="btn btn-sm btn-secondary text-xs hover:outline-2 hover:outline-neutral-content"
-  >
-    {suggestion}
-  </button>
-{/snippet}
 
 <CollapseWrapper title="Add an answer">
   <div class="mt-3 grid gap-2">
@@ -55,7 +65,15 @@
     </div>
     <div class="mt-2 flex flex-wrap gap-2">
       {#each suggestions as suggestion, i (suggestion)}
-        {@render suggestionButton(suggestion, i)}
+        <button
+          in:receive={{ key: i }}
+          out:send={{ key: i }}
+          animate:flip
+          onclick={() => applySuggestion(suggestion)}
+          class="btn btn-sm btn-secondary text-xs hover:outline-2 hover:outline-neutral-content"
+        >
+          {suggestion}
+        </button>
       {/each}
     </div>
   </div>

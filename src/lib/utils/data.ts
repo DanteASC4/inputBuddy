@@ -5,6 +5,7 @@ export const recommendedLabels = [
   'LinkedIn Profile',
   'Github',
   'Website',
+  'Website / Portfolio',
   'Are you authorized to work in the United States?',
   'City',
   'Country',

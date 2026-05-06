@@ -32,7 +32,7 @@
     </div>
     <h1 class="text-2xl font-semibold">Autofill your repeat answers</h1>
     <p class="mt-1 text-sm italic text-neutral-content opacity-70">
-      Save common answers once, then reuse them across job application forms.
+      Save common answers once, then reuse them across any forms.
     </p>
   </header>
 
@@ -41,9 +41,9 @@
   {:then}
     <ScanNowButton />
     <AnswerForm suggestions={trueRecommendations} />
+    <AnswerList />
     <Settings />
     <Profiles />
-    <AnswerList />
   {:catch}
     <p>Failed to initialize!</p>
   {/await}

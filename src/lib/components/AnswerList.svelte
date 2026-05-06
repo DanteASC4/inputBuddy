@@ -2,6 +2,7 @@
   import { Appstate } from '$lib/state.svelte';
   import { normalizeText } from '@u/matching';
   import CollapseWrapper from './CollapseWrapper.svelte';
+  import Subtext from './Subtext.svelte';
 
   let filter = $state('');
 
@@ -33,9 +34,7 @@
     </div>
     <div class="badge badge-info font-mono">{Appstate.answers.length}</div>
   </div>
-  <p class="text-xs italic mt-2">
-    Answers are editable and save automatically when changed!
-  </p>
+  <Subtext>Answers are editable and save automatically when changed!</Subtext>
 
   <input
     class="mt-3 w-full input input-sm active:input-secondary focus:input-secondary"
@@ -57,7 +56,9 @@
         <div class="rounded-xl border border-neutral bg-base-100/80 px-3 py-2">
           <div class="flex items-start justify-between gap-3">
             <div>
-              <div class="text-base text-secondary font-semibold">
+              <div
+                class="text-base text-secondary text-shadow-secondary-content font-bold"
+              >
                 {answer.label}
               </div>
               <!-- <div class="mt-1 text-sm text-accent-content">{answer.value}</div> -->
@@ -71,10 +72,10 @@
             </div>
             <button
               type="button"
-              class="text-xs text-neutral-400 hover:text-neutral-700"
+              class="btn btn-xs btn-error btn-outline font-mono"
               onclick={() => Appstate.removeAnswer(answer.id)}
             >
-              Remove
+              &nbsp;X&nbsp;
             </button>
           </div>
         </div>

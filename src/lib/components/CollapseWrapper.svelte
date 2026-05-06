@@ -6,7 +6,7 @@
 </script>
 
 <section
-  class="collapse collapse-arrow rounded-2xl border border-neutral bg-base-100/80 py-4 shadow-sm hover:border-secondary focus-within:border-secondary my-4"
+  class="collapse collapse-arrow rounded-2xl border border-neutral bg-base-100/80 py-4 shadow-sm hover:border-secondary focus-within:border-secondary my-4 focus-within:[&_.collapse-title]:text-secondary focus-within:[&_.collapse-title]:brightness-200"
   class:collapse-open={Appstate.settings.keepOpen}
 >
   <input type="checkbox" />

@@ -1,6 +1,7 @@
 <script lang="ts">
   import { Appstate } from '$lib/state.svelte';
   import CollapseWrapper from './CollapseWrapper.svelte';
+  import Subtext from './Subtext.svelte';
 
   let selection = $state(Appstate.currentProfile);
   let newProfileName = $state('');
@@ -29,6 +30,9 @@
 </script>
 
 <CollapseWrapper title="Input Profiles">
+  <Subtext>
+    Save sets of inputs & values under profiles for easy switching & separation!
+  </Subtext>
   <div class="flex flex-row justify-center items-center pt-8">
     <div class="join">
       <div class="relative">
