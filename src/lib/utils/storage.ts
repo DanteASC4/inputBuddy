@@ -22,6 +22,7 @@ const DEFAULT_SETTINGS: Settings = {
   enabled: true,
   matchMode: "partial",
   keepOpen: false,
+  debug: false,
 };
 
 const defaultAnswerProfiles = ["default"];
@@ -263,10 +264,16 @@ export const getSettings = async (): Promise<Settings> => {
       ? (storedSettings as Settings).keepOpen
       : DEFAULT_SETTINGS.keepOpen;
 
+  const debug =
+    typeof (storedSettings as Settings).debug === "boolean"
+      ? (storedSettings as Settings).debug
+      : DEFAULT_SETTINGS.debug;
+
   return {
     enabled,
     matchMode: validMatchMode ? matchMode : DEFAULT_SETTINGS.matchMode,
     keepOpen,
+    debug: debug,
   };
 };
 
