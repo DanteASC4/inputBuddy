@@ -19,6 +19,7 @@ export const Appstate = $state<AppState>({
     enabled: true,
     matchMode: "partial",
     keepOpen: false,
+    debug: true,
   },
   isSaving: false,
   saveError: "",

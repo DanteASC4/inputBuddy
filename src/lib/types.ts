@@ -10,6 +10,7 @@ export type Settings = {
   enabled: boolean;
   matchMode: MatchMode;
   keepOpen: boolean;
+  debug: boolean;
 };
 
 // export type AutofillSettingsProps = {};

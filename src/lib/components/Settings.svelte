@@ -3,24 +3,25 @@
 
   import CollapseWrapper from "./CollapseWrapper.svelte";
 
-  // import type { AutofillSettingsProps } from '@types';
-
-  // let {}: AutofillSettingsProps = $props();
-
   let enabled = $state(Appstate.settings.enabled);
   let matchMode = $state(Appstate.settings.matchMode);
   let keepOpen = $state(Appstate.settings.keepOpen);
+  let debug = $state(Appstate.settings.debug);
 
-  function updateEnabled(_event: Event) {
+  function updateEnabled() {
     Appstate.changeSettings({ enabled });
   }
 
-  function updateKeepOpen(_event: Event) {
+  function updateKeepOpen() {
     Appstate.changeSettings({ keepOpen });
   }
 
-  function updateMatchMode(_event: Event) {
+  function updateMatchMode() {
     Appstate.changeSettings({ matchMode });
+  }
+
+  function updateDebug() {
+    Appstate.changeSettings({ debug });
   }
 </script>
 
@@ -79,6 +80,25 @@
       onchange={updateKeepOpen}
       type="checkbox"
       class="toggle toggle-secondary mt-2"
+    />
+  </div>
+
+  <div class="mt-4 flex items-center justify-between">
+    <div>
+      <div
+        class="text-neutral-content text-sm font-semibold tracking-[0.2em] uppercase"
+      >
+        Debug Mode
+      </div>
+      <div class="text-neutral-content text-sm opacity-70">
+        Enable browser console logging of various app actions.
+      </div>
+    </div>
+    <input
+      bind:checked={debug}
+      onchange={updateDebug}
+      type="checkbox"
+      class="toggle toggle-secondary"
     />
   </div>
 
