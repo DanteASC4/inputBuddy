@@ -1,5 +1,5 @@
 import { fillInput, getLabelCandidates, isEligibleInput } from "@u/eles";
-import { findMatchingAnswer } from "@u/matching";
+import { findBestAnswer } from "@u/matching";
 import { getAnswers, getLastProfile, getSettings } from "@u/storage";
 import { infoLog } from "@u/styled-log";
 import { browser } from "wxt/browser";
@@ -44,15 +44,12 @@ const scanAndFill = async () => {
     const candidates = getLabelCandidates(element);
     if (!candidates.length) continue;
 
-    const best = findMatchingAnswer(candidates, answers, settings.matchMode);
+    const best = findBestAnswer(candidates, answers, settings.matchMode);
     if (!best) continue;
 
+    // NOTE may need to tweak this!
     const threshold =
-      settings.matchMode === "exact"
-        ? 1
-        : settings.matchMode === "partial"
-          ? PARTIAL_MATCH_THRESHOLD
-          : 0;
+      settings.matchMode === "exact" ? 1 : PARTIAL_MATCH_THRESHOLD;
 
     if (best.score < threshold) continue;
 

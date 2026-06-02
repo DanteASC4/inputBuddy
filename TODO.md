@@ -3,10 +3,12 @@
 V1:
 
 - [ ] Expand matching options & descriptions
-  - [ ] "True exact"
-  - [ ] Same with only letters
-  - [ ] Similarity
-  - [ ] True fuzzy matching algo
+  - [ ] New Match Modes
+    - [x] "True exact"
+    - [x] Same with only letters
+    - [x] Dice Coefficient Similarity
+    - [x] True fuzzy matching algo
+  - [ ] Settings For Each
 - [ ] New feature: Context Menu for inputs
   - [ ] When users focus on a text input, show a floating menu to the side of it with the top 3 most likely saved answers
   - [ ] Also allow searching saved values
@@ -21,3 +23,4 @@ V1:
 Future / ideas:
 
 - nlp matching?
+  - would likely be a paid feature

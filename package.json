@@ -20,7 +20,8 @@
     "format:fix": "prettier . --write",
     "tidy": "bun run lint:fix && bun run format:fix",
     "check": "svelte-check --tsconfig ./tsconfig.json",
-    "postinstall": "wxt prepare"
+    "postinstall": "wxt prepare",
+    "test": "vitest"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
@@ -41,6 +42,7 @@
     "tslib": "^2.8.1",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.59.2",
+    "vitest": "^4.1.8",
     "wxt": "^0.20.17"
   },
   "dependencies": {

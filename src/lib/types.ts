@@ -4,7 +4,13 @@ export type Answer = {
   value: string;
 };
 
-export type MatchMode = "exact" | "partial" | "suggest";
+export type MatchResult = {
+  answer: Answer;
+  score: number;
+  label: string;
+};
+
+export type MatchMode = "exact" | "similar" | "partial" | "fuzzy";
 
 export type Settings = {
   enabled: boolean;
