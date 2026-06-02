@@ -43,7 +43,7 @@ export const diceCoefficient = (text1: string, text2: string) => {
 const isSep = (c: string) => c === " " || c === "-" || c === "_";
 
 export function fuzzyScorer(look: string, inString: string) {
-  if(look === inString) return 1;
+  if (look === inString) return 1;
   let score = 1;
   const checkReg = new RegExp(look.slice(0).split("").join(".*?"));
   if (checkReg.test(inString)) score = 0;
