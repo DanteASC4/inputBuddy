@@ -3,6 +3,7 @@
 
   import CollapseWrapper from "./CollapseWrapper.svelte";
 
+  // TODO can make this more dynamic for sure but this works perfectly fine for now
   let enabled = $state(Appstate.settings.enabled);
   let matchMode = $state(Appstate.settings.matchMode);
   let keepOpen = $state(Appstate.settings.keepOpen);
@@ -108,7 +109,7 @@
     <div
       class="text-neutral-content text-sm font-semibold tracking-[0.2em] uppercase"
     >
-      Match behavior
+      Matching Strategy
     </div>
 
     <fieldset class="fieldset">
@@ -116,13 +117,13 @@
         <input
           bind:group={matchMode}
           onchange={updateMatchMode}
-          value="exact"
+          value="fuzzy"
           type="radio"
           class="radio radio-sm radio-secondary"
         />
         {@render radioLabel(
-          "Exact Match",
-          "Only fill when the label text matches exactly.",
+          "Fuzzy Match (Recommended)",
+          "Use a well known matching algorithm to find the most likely match for each input, even if the label text isn't exactly the same.",
         )}
       </label>
       <label class="flex cursor-pointer items-center gap-2">
@@ -134,21 +135,34 @@
           class="radio radio-sm radio-secondary"
         />
         {@render radioLabel(
-          "Partial Match",
-          "Use fuzzy matching with a conservative threshold to find close matches.",
+          "Partial Matching",
+          "Find matches based on partial text similarity. This is less flexible than fuzzy matching but more likely to avoid incorrect matches.",
         )}
       </label>
       <label class="flex cursor-pointer items-center gap-2">
         <input
           bind:group={matchMode}
           onchange={updateMatchMode}
-          value="suggest"
+          value="similar"
           type="radio"
           class="radio radio-sm radio-secondary"
         />
         {@render radioLabel(
-          "Suggest for every input",
-          "Utilize autocomplete with all saved answers for every detected input.",
+          "Text Matching",
+          "Matches only text with the same characters, ignoring case and non-alphanumeric characters. A simple and fast option but won't handle typos or variations in wording.",
+        )}
+      </label>
+      <label class="flex cursor-pointer items-center gap-2">
+        <input
+          bind:group={matchMode}
+          onchange={updateMatchMode}
+          value="exact"
+          type="radio"
+          class="radio radio-sm radio-secondary"
+        />
+        {@render radioLabel(
+          "Exact Match",
+          "Only fill inputs when the label text matches exactly, true 1 to 1.",
         )}
       </label>
     </fieldset>

@@ -1,5 +1,13 @@
 import type { Answer, MatchMode, MatchResult } from "@types";
 
+export const normalizeText = (text: string): string => {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+};
+
 export const cleanText = (text: string) =>
   text.replace(/[^A-z0-9]/g, "").toLowerCase();
 
