@@ -1,12 +1,4 @@
-import type { Answer, MatchMode, MatchResult } from "@types";
-
-export const normalizeText = (text: string): string => {
-  return text
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
-};
+import type { Answer, MatchMode, MatchResult, Winners } from "@types";
 
 export const cleanText = (text: string) =>
   text.replace(/[^A-z0-9]/g, "").toLowerCase();
@@ -109,13 +101,47 @@ export function fuzzy(source: string, targets: string[]) {
   return best;
 }
 
-// Altogether now
+//* Likely a better way to do this but since there's only ever three things performance shouldn't be an issue.
+//* May re-visit
+const updateWinners = (winners: Winners, match: MatchResult): void => {
+  const current = [winners.first, winners.second, winners.third];
+  const existing = current.find(
+    (winner) => winner?.answer.id === match.answer.id,
+  );
+  if (existing && existing.score >= match.score) return;
+  const withoutSameAnswer = current.filter(
+    (winner): winner is MatchResult =>
+      Boolean(winner) && winner?.answer.id !== match.answer.id,
+  );
+  if (!withoutSameAnswer[0] || match.score > withoutSameAnswer[0].score) {
+    winners.first = match;
+    winners.second = withoutSameAnswer[0] ?? null;
+    winners.third = withoutSameAnswer[1] ?? null;
+    return;
+  }
+  if (!withoutSameAnswer[1] || match.score > withoutSameAnswer[1].score) {
+    winners.first = withoutSameAnswer[0];
+    winners.second = match;
+    winners.third = withoutSameAnswer[1] ?? null;
+    return;
+  }
+  if (!withoutSameAnswer[2] || match.score > withoutSameAnswer[2].score) {
+    winners.first = withoutSameAnswer[0];
+    winners.second = withoutSameAnswer[1];
+    winners.third = match;
+  }
+};
+
 export const findBestAnswer = (
   candidates: string[],
   answers: Answer[],
   mode: MatchMode,
-): MatchResult | null => {
-  let best: MatchResult | null = null;
+): Winners => {
+  const winners: Winners = {
+    first: null,
+    second: null,
+    third: null,
+  };
 
   for (const candidate of candidates) {
     if (candidate.length < 2) continue;
@@ -136,11 +162,10 @@ export const findBestAnswer = (
         score = fuzzyScorer(candidate, answer.label);
       }
 
-      if (!best || score > best.score) {
-        best = { answer, score, label: candidate };
-      }
+      const match: MatchResult = { answer, score, label: candidate };
+      updateWinners(winners, match);
     }
   }
 
-  return best;
+  return winners;
 };

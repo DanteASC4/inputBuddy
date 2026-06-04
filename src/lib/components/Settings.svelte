@@ -2,6 +2,7 @@
   import { Appstate } from "$lib/state.svelte";
 
   import CollapseWrapper from "./CollapseWrapper.svelte";
+  import Subtext from "./Subtext.svelte";
 
   // TODO can make this more dynamic for sure but this works perfectly fine for now
   let enabled = $state(Appstate.settings.enabled);
@@ -111,6 +112,31 @@
     >
       Matching Strategy
     </div>
+
+    <details class="mt-2">
+      <summary class="cursor-pointer text-sm underline">
+        Learn More / What is this?
+      </summary>
+      <Subtext>
+        The way InputBuddy works is by looking for all the input fields on a
+        page, and then finding the corresponding label for each.
+
+        <br />
+        <br />
+        Not Every page has a label or the label may be worded differently than what
+        you saved.
+
+        <br />
+        <br />
+        For example, you may have saved an answer like
+        <b class="text-secondary">"First Name"</b>, but a label on a page could
+        say
+        <b class="text-secondary">"Your Name"</b>
+        or <b class="text-secondary">"Name (First)"</b>. The matching strategy
+        determines how flexible InputBuddy is when matching saved answers to
+        input fields on a page.
+      </Subtext>
+    </details>
 
     <fieldset class="fieldset">
       <label class="flex cursor-pointer items-center gap-2">

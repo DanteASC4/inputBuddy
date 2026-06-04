@@ -1,20 +1,20 @@
 <script lang="ts">
-  import { normalizeText } from "@u/matching";
-
   import { Appstate } from "$lib/state.svelte";
 
   import CollapseWrapper from "./CollapseWrapper.svelte";
   import Subtext from "./Subtext.svelte";
 
-  let filter = $state("");
-
-  const filteredAnswers = $derived.by(() => {
-    if (!filter.trim()) return Appstate.answers;
-    const query = normalizeText(filter);
-    return Appstate.answers.filter((answer) =>
-      normalizeText(answer.label).includes(query),
-    );
-  });
+  let query = $state("");
+  const matchingAnswers = $derived(
+    Appstate.answers.filter((answer) => {
+      const search = query.trim().toLowerCase();
+      if (!search) return true;
+      return (
+        answer.label.toLowerCase().includes(search) ||
+        answer.value.toLowerCase().includes(search)
+      );
+    }),
+  );
 
   async function updateAnswer(
     event: Event & {
@@ -40,21 +40,21 @@
 
   <input
     class="input input-sm active:input-secondary focus:input-secondary mt-3 w-full"
-    placeholder="Start typing to filter by label"
-    bind:value={filter}
+    placeholder="Start typing to search saved answers"
+    bind:value={query}
   />
 
   {#if Appstate.answers.length === 0}
     <div class="mt-4 text-xs text-neutral-500">
       No answers yet. Add one above to get started.
     </div>
-  {:else if filteredAnswers.length === 0}
+  {:else if matchingAnswers.length === 0}
     <div class="mt-4 text-xs text-neutral-500">
       No answers match your filter.
     </div>
   {:else}
     <div class="mt-4 grid gap-3">
-      {#each filteredAnswers as answer (answer.id)}
+      {#each matchingAnswers as answer (answer.id)}
         <div class="border-neutral bg-base-100/80 rounded-xl border px-3 py-2">
           <div class="flex items-start justify-between gap-3">
             <div>

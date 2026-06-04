@@ -1,14 +1,26 @@
+import "./app.css";
+
+import InjectedMenu from "@c/InjectedMenu.svelte";
 import { fillInput, getLabelCandidates, isEligibleInput } from "@u/eles";
 import { findBestAnswer } from "@u/matching";
 import { getAnswers, getLastProfile, getSettings } from "@u/storage";
 import { infoLog } from "@u/styled-log";
+import { mount, unmount } from "svelte";
 import { browser } from "wxt/browser";
+
+import { Contentstate, ScannerOutcome } from "$lib/stores/content.svelte";
 
 const INPUT_SELECTOR =
   'input[type="text"], input[type="email"], input[type="tel"], input[type="url"], input[type="search"], textarea';
 
 const SCAN_DEBOUNCE_MS = 250;
 const PARTIAL_MATCH_THRESHOLD = 0.78;
+
+const loadContentAnswers = async () => {
+  const profile = (await getLastProfile()) ?? "default";
+  Contentstate.profile = profile;
+  Contentstate.answers = await getAnswers(profile);
+};
 
 let scanTimeout: number | null = null;
 const scheduleScan = () => {
@@ -44,22 +56,39 @@ const scanAndFill = async () => {
     const candidates = getLabelCandidates(element);
     if (!candidates.length) continue;
 
-    const best = findBestAnswer(candidates, answers, settings.matchMode);
-    if (!best) continue;
+    const winners = findBestAnswer(candidates, answers, settings.matchMode);
+    if (!winners.first) continue;
 
     // NOTE may need to tweak this!
     const threshold =
       settings.matchMode === "exact" ? 1 : PARTIAL_MATCH_THRESHOLD;
 
-    if (best.score < threshold) continue;
+    if (winners.first.score < threshold) {
+      // ScannerOutcome.notFilled.push(element);
+      // console.group("Not Filling:");
+      // console.log(element);
+      // console.log(winners);
+      // console.groupEnd();
+      ScannerOutcome.notFilled.set(element, winners);
+      continue;
+    }
 
-    fillInput(element, best.answer.value);
+    fillInput(element, winners.first.answer.value);
+
+    ScannerOutcome.filled.push(element);
+    // Filled.elements.push(element);
+    // Filled.elements.set(element, {
+    //   answer: winners.first.answer.value,
+    //   label: winners.first.answer.label,
+    // });
   }
 };
 
 export default defineContentScript({
   matches: ["<all_urls>"],
-  main() {
+  cssInjectionMode: "ui",
+  async main(ctx) {
+    // ? Filling & Scanning
     let observer: MutationObserver | null = null;
     const startAuto = () => {
       if (observer) return;
@@ -76,6 +105,8 @@ export default defineContentScript({
       observer?.disconnect();
       observer = null;
     };
+
+    await loadContentAnswers();
 
     browser.storage.onChanged.addListener(async (changes, areaName) => {
       if (areaName !== "local") return;
@@ -99,6 +130,14 @@ export default defineContentScript({
         if (changes[activeProfile]) {
           scheduleScan();
         }
+
+        if (
+          changes?.profiles ||
+          changes?.lastProfile ||
+          changes[activeProfile]
+        ) {
+          await loadContentAnswers();
+        }
       }
     });
 
@@ -111,30 +150,26 @@ export default defineContentScript({
       }
     });
 
-    void (async () => {
+    (async () => {
       const settings = await getSettings();
       if (settings.enabled) {
         startAuto();
       }
     })();
+
+    //? Injected Menu
+    const ui = await createShadowRootUi(ctx, {
+      name: "inputbuddy-menu",
+      position: "inline",
+      anchor: "body",
+      onMount: (container) => {
+        return mount(InjectedMenu, { target: container });
+      },
+      onRemove: (app) => {
+        if (app) unmount(app);
+      },
+    });
+
+    ui.mount();
   },
 });
-// export default defineContentScript({
-//   matches: ['<all_urls>'],
-//   main() {
-//     const observer = new MutationObserver(() => scheduleScan());
-//     observer.observe(document.documentElement, {
-//       childList: true,
-//       subtree: true,
-//       attributes: true,
-//     });
-
-//     browser.storage.onChanged.addListener((changes, areaName) => {
-//       if (areaName !== 'local') return;
-//       if (Appstate.settings.enabled === false) return;
-//       if (changes.answers || changes.settings) scheduleScan();
-//     });
-
-//     scheduleScan();
-//   },
-// });

@@ -10,6 +10,12 @@ export type MatchResult = {
   label: string;
 };
 
+export type Winners = {
+  first: MatchResult | null;
+  second: MatchResult | null;
+  third: MatchResult | null;
+};
+
 export type MatchMode = "exact" | "similar" | "partial" | "fuzzy";
 
 export type Settings = {
@@ -17,6 +23,12 @@ export type Settings = {
   matchMode: MatchMode;
   keepOpen: boolean;
   debug: boolean;
+};
+
+export type FillableElement = HTMLInputElement | HTMLTextAreaElement;
+export type PartialMatchInfo = {
+  bestAnswer: string;
+  score: number;
 };
 
 // export type AutofillSettingsProps = {};
@@ -52,3 +64,13 @@ export type AppState = {
   switchsertProfile: (profile: string) => Promise<void>;
   delProfile: (profile: string) => Promise<void>;
 };
+
+export type ScannerOutcomeShape = {
+  filled: FillableElement[];
+  notFilled: WeakMap<FillableElement, Winners>;
+};
+
+export type ContentState = {
+  answers: Answer[];
+  profile: string;
+}
