@@ -16,7 +16,7 @@
   });
 
   const ready = Appstate.init();
-  $inspect(Appstate.settings);
+  $inspect(ready);
 
   /* onMount(async () => {
     await Appstate.init();

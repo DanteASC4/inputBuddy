@@ -1,5 +1,10 @@
-import type { Answer, Settings } from "@types";
-import { isObject } from "radashi";
+import {
+  type Answer,
+  AnswerSchema,
+  type Settings,
+  SettingsSchema,
+} from "@types";
+import * as v from "valibot";
 import { browser } from "wxt/browser";
 
 //    ▄█    █▄       ▄████████  ▄█          ▄███████▄    ▄████████    ▄████████    ▄████████
@@ -18,32 +23,13 @@ const STORAGE_KEYS = {
   lastProfile: "lastProfile",
 } as const;
 
-const DEFAULT_SETTINGS: Settings = {
-  enabled: true,
-  matchMode: "partial",
-  keepOpen: false,
-  debug: false,
-};
-
 const defaultAnswerProfiles = ["default"];
 
 const normalizeKey = (label: string) => label.trim().toLowerCase();
 
-const isMatchMode = (s: string): s is Settings["matchMode"] =>
-  s === "exact" || s === "partial" || s === "suggest";
-
 const coerceAnswers = (value: unknown): Answer[] => {
   if (!Array.isArray(value)) return [];
-
-  return value.filter((item): item is Answer => {
-    if (!isObject(item)) return false;
-    const record = item as Answer;
-    return (
-      typeof record.id === "string" &&
-      typeof record.label === "string" &&
-      typeof record.value === "string"
-    );
-  });
+  return value.filter((item): item is Answer => v.is(AnswerSchema, item));
 };
 
 const resetAllStorageKeys = async (): Promise<void> => {
@@ -251,30 +237,16 @@ export const deleteAnswer = async (
 export const getSettings = async (): Promise<Settings> => {
   const result = await browser.storage.local.get(STORAGE_KEYS.settings);
   const stored = result[STORAGE_KEYS.settings];
-  const storedSettings = stored && typeof stored === "object" ? stored : {};
-  const enabled =
-    typeof (storedSettings as Settings).enabled === "boolean"
-      ? (storedSettings as Settings).enabled
-      : DEFAULT_SETTINGS.enabled;
-  const matchMode = (storedSettings as Settings).matchMode;
-  const validMatchMode = isMatchMode(matchMode);
 
-  const keepOpen =
-    typeof (storedSettings as Settings).keepOpen === "boolean"
-      ? (storedSettings as Settings).keepOpen
-      : DEFAULT_SETTINGS.keepOpen;
+  const storedSettings = v.safeParse(SettingsSchema, stored);
 
-  const debug =
-    typeof (storedSettings as Settings).debug === "boolean"
-      ? (storedSettings as Settings).debug
-      : DEFAULT_SETTINGS.debug;
-
-  return {
-    enabled,
-    matchMode: validMatchMode ? matchMode : DEFAULT_SETTINGS.matchMode,
-    keepOpen,
-    debug: debug,
-  };
+  if (!storedSettings.success) {
+    return v.getFallbacks(SettingsSchema);
+  } else {
+    return {
+      ...storedSettings.output,
+    };
+  }
 };
 
 export const updateSettings = async (

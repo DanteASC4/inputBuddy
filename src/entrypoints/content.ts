@@ -8,6 +8,7 @@ import { infoLog } from "@u/styled-log";
 import { mount, unmount } from "svelte";
 import { browser } from "wxt/browser";
 
+import { Appstate } from "$lib/state.svelte";
 import { Contentstate, ScannerOutcome } from "$lib/stores/content.svelte";
 
 const INPUT_SELECTOR =
@@ -20,6 +21,7 @@ const loadContentAnswers = async () => {
   const profile = (await getLastProfile()) ?? "default";
   Contentstate.profile = profile;
   Contentstate.answers = await getAnswers(profile);
+  Contentstate.indicateFilled = Appstate.settings.indicateFilled;
 };
 
 let scanTimeout: number | null = null;

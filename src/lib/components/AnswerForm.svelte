@@ -32,6 +32,12 @@
   let newLabel = $state("");
   let newValue = $state("");
 
+  async function saveAns() {
+    await Appstate.saveAnswer(newLabel, newValue);
+    newLabel = "";
+    newValue = "";
+  }
+
   function applySuggestion(suggestion: string) {
     newLabel = suggestion;
     // Clear value when switching suggestions
@@ -54,7 +60,7 @@
     <button
       type="button"
       class="btn btn-secondary"
-      onclick={() => Appstate.saveAnswer(newLabel, newValue)}
+      onclick={saveAns}
       disabled={Appstate.isSaving || !newLabel.trim() || !newValue.trim()}
     >
       Save answer

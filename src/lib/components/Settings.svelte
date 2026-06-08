@@ -9,6 +9,7 @@
   let matchMode = $state(Appstate.settings.matchMode);
   let keepOpen = $state(Appstate.settings.keepOpen);
   let debug = $state(Appstate.settings.debug);
+  let indicateFilled = $state(Appstate.settings.indicateFilled);
 
   function updateEnabled() {
     Appstate.changeSettings({ enabled });
@@ -25,6 +26,14 @@
   function updateDebug() {
     Appstate.changeSettings({ debug });
   }
+
+  function updateInidcateFilled() {
+    Appstate.changeSettings({ indicateFilled });
+  }
+
+  $effect(() => {
+    console.log("changed");
+  });
 </script>
 
 {#snippet radioLabel(title: string, subtitle?: string)}
@@ -99,6 +108,25 @@
     <input
       bind:checked={debug}
       onchange={updateDebug}
+      type="checkbox"
+      class="toggle toggle-secondary"
+    />
+  </div>
+  <div class="mt-4 flex items-center justify-between">
+    <div>
+      <div
+        class="text-neutral-content text-sm font-semibold tracking-[0.2em] uppercase"
+      >
+        Indicate Filled
+      </div>
+      <div class="text-neutral-content text-sm opacity-70">
+        Toggles adding a green outline to any inputs that were filled by
+        InputBuddy.
+      </div>
+    </div>
+    <input
+      bind:checked={indicateFilled}
+      onchange={updateInidcateFilled}
       type="checkbox"
       class="toggle toggle-secondary"
     />

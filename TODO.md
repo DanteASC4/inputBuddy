@@ -12,15 +12,10 @@ V1:
 - [x] New feature: Context Menu for inputs
   - [x] When users focus on a text input, show a floating menu to the side of it with the top 3 most likely saved answers
   - [x] Also allow searching saved values
-- [ ] New feature: Indicate autofilled elements setting
-  - [ ] Show / highlight any elements that were automatically filled
-- [ ] New feature: Expanded value setting
-  - [ ] `<select>`
-  - [ ] `<input type="radio">`
-  - [ ] `<input type="checkbox">`
-- [ ] Fix profiles UX
-- [ ] Tie match modes to profiles
-- [ ] Go through user flow
+- [x] New feature: Indicate autofilled elements setting
+  - [x] Show / highlight any elements that were automatically filled
+- [x] Fix profiles UX
+- [x] Go through user flow
 - [ ] Build test cases for matching strategies from real pages
 - [ ] Fix the "autofill" setting disabling filling entirely
 - [ ] Defer scan until page done loading
@@ -30,5 +25,12 @@ V1:
 
 Future / ideas:
 
+**Note** moved a couple things here as I want to spend time on getting em right, but they aren't critical to v1.
+
+- New feature: Expanded value setting
+  - `<select>`
+  - `<input type="radio">`
+  - `<input type="checkbox">`
+- Tie match modes to profiles
 - nlp matching?
   - would likely be a paid feature

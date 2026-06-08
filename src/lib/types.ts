@@ -1,8 +1,12 @@
-export type Answer = {
-  id: string;
-  label: string;
-  value: string;
-};
+import * as v from "valibot";
+
+export const AnswerSchema = v.object({
+  id: v.string(),
+  label: v.string(),
+  value: v.string(),
+});
+
+export type Answer = v.InferOutput<typeof AnswerSchema>;
 
 export type MatchResult = {
   answer: Answer;
@@ -16,34 +20,32 @@ export type Winners = {
   third: MatchResult | null;
 };
 
-export type MatchMode = "exact" | "similar" | "partial" | "fuzzy";
+export const MatchModeSchema = v.picklist([
+  "exact",
+  "similar",
+  "partial",
+  "fuzzy",
+]);
 
-export type Settings = {
-  enabled: boolean;
-  matchMode: MatchMode;
-  keepOpen: boolean;
-  debug: boolean;
-};
+export type MatchMode = v.InferOutput<typeof MatchModeSchema>;
+
+export const SettingsSchema = v.object({
+  enabled: v.fallback(v.boolean(), true),
+  matchMode: v.fallback(MatchModeSchema, "fuzzy"),
+  keepOpen: v.fallback(v.boolean(), false),
+  debug: v.fallback(v.boolean(), false),
+  indicateFilled: v.fallback(v.boolean(), true),
+});
+
+export const DEFAULT_SETTINGS = v.getFallbacks(SettingsSchema);
+
+export type Settings = v.InferOutput<typeof SettingsSchema>;
 
 export type FillableElement = HTMLInputElement | HTMLTextAreaElement;
 export type PartialMatchInfo = {
   bestAnswer: string;
   score: number;
 };
-
-// export type AutofillSettingsProps = {};
-
-// export type AnswerFormProps = {
-// 	suggestions: readonly string[];
-// };
-
-// export type AnswerListProps = {};
-
-// export type CollapseWrapperProps = {
-// 	title: string;
-// 	children?: Snippet;
-// 	class?: ClassValue;
-// };
 
 export type AppState = {
   answers: Answer[];
@@ -73,4 +75,5 @@ export type ScannerOutcomeShape = {
 export type ContentState = {
   answers: Answer[];
   profile: string;
-}
+  indicateFilled: Settings["indicateFilled"];
+};

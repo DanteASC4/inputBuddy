@@ -11,6 +11,7 @@ import {
   updateSettings,
   upsertAnswer,
 } from "@u/storage";
+import { infoLog } from "@u/styled-log";
 
 export const Appstate = $state<AppState>({
   answers: [],
@@ -20,6 +21,7 @@ export const Appstate = $state<AppState>({
     matchMode: "partial",
     keepOpen: false,
     debug: true,
+    indicateFilled: true,
   },
   isSaving: false,
   saveError: "",
@@ -90,6 +92,7 @@ export const Appstate = $state<AppState>({
     }
   },
   async switchProfile(profile: string) {
+    infoLog(`Switching from profile: ${this.currentProfile} to ${profile}`);
     this.currentProfile = profile;
     await this.loadAnswers(profile);
     await setLastProfile(profile);

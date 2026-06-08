@@ -19,6 +19,7 @@
     if (busy) return;
     busy = true;
     await Appstate.switchsertProfile(newProfileName);
+    selection = newProfileName;
     newProfileName = "";
     busy = false;
   }
@@ -30,61 +31,65 @@
   }
 </script>
 
-<CollapseWrapper title="Input Profiles">
+<CollapseWrapper title="Answers Profiles">
   <Subtext>
-    Save sets of inputs & values under profiles for easy switching & separation!
+    Save sets of labels & answers under profiles for easy switching &
+    separation!
   </Subtext>
-  <div class="flex flex-row items-center justify-center pt-8">
-    <div class="join">
-      <div class="relative">
-        {#key Appstate.currentProfile}
-          <select
-            {onchange}
-            bind:value={selection}
-            disabled={busy}
-            class="select join-item active:select-secondary focus-within:select-secondary peer w-32"
-          >
-            {#each Appstate.profiles as profile, i (i)}
-              {@const isCurrent = profile === Appstate.currentProfile}
-              <option value={profile} selected={isCurrent} disabled={isCurrent}>
-                {profile}
-                {#if isCurrent}
-                  <span class="opacity-75"> (current) </span>
-                  <div
-                    class="tooltip tooltip-error tooltip-left"
-                    data-tip="No undoing this!"
-                  >
-                    <button
-                      onclick={triggerDelete}
-                      class="btn btn-sm btn-outline btn-error"
-                    >
-                      Delete
-                    </button>
-                  </div>
-                {/if}
-              </option>
-            {/each}
-          </select>
-        {/key}
-        <div
-          class="absolute -top-4 left-4 font-bold transition-opacity peer-has-focus-within:opacity-50"
+  <div class="flex flex-col items-center justify-center space-y-2 pt-8">
+    {#key Appstate.currentProfile}
+      <fieldset class="w-full grow">
+        <legend class="fieldset-legend">Pick a profile</legend>
+        <select
+          {onchange}
+          bind:value={selection}
+          disabled={busy}
+          class="select join-item active:select-secondary focus-within:select-secondary peer w-full"
         >
-          Input Profile
-        </div>
-      </div>
+          {#each Appstate.profiles as profile, i (i)}
+            {@const isCurrent = profile === Appstate.currentProfile}
+            <option
+              value={profile}
+              selected={profile === Appstate.currentProfile}
+            >
+              {profile}
+              {#if isCurrent}
+                <span class="opacity-75"> (current) </span>
+              {/if}
+            </option>
+          {/each}
+        </select>
+      </fieldset>
+    {/key}
+
+    <div class="join w-full">
       <div
-        class="tooltip tooltip-secondary"
+        class="tooltip tooltip-secondary w-full"
         data-tip="Just enter a name & hit create!"
       >
         <input
           bind:value={newProfileName}
-          class="input join-item active:input-secondary focus:input-secondary w-36"
+          class="input join-item active:input-secondary focus:input-secondary w-full"
           type="text"
           name="new-profile"
           placeholder="Or add a new profile"
         />
       </div>
       <button onclick={triggerCreate} class="btn join-item">Create</button>
+    </div>
+
+    <div class="tooltip tooltip-error tooltip-top" data-tip="No undoing this!">
+      <button
+        onclick={triggerDelete}
+        class="btn btn-sm btn-error"
+        disabled={Appstate.currentProfile === "default"}
+      >
+        {#if Appstate.currentProfile === "default"}
+          Can't delete default profile
+        {:else}
+          Delete Current Profile
+        {/if}
+      </button>
     </div>
   </div>
 </CollapseWrapper>

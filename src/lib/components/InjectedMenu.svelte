@@ -98,11 +98,21 @@
   const resizeMoveDeb = debounce({ delay: 100 }, resizeMove);
 
   $effect(() => {
-    ScannerOutcome.filled.forEach((el) => {
-      el.style.outline = "2px solid oklch(0.7941 0.1899 149.29)";
-      el.style.outlineOffset = "2px";
-      el.style.filter = "drop-shadow(0 0 2px oklch(0.7941 0.1899 149.29))";
-    });
+    if (Contentstate.indicateFilled) {
+      ScannerOutcome.filled.forEach((el) => {
+        el.style.outline = "2px solid oklch(0.7941 0.1899 149.29)";
+        el.style.outlineOffset = "2px";
+        el.style.filter = "drop-shadow(0 0 2px oklch(0.7941 0.1899 149.29))";
+      });
+    } else {
+      ScannerOutcome.filled.forEach((el) => {
+        if (el.style.outline === "2px solid oklch(0.7941 0.1899 149.29)") {
+          el.style.outline = "";
+          el.style.outlineOffset = "";
+          el.style.filter = "";
+        }
+      });
+    }
 
     return () => {
       ScannerOutcome.filled.forEach((el) => {
