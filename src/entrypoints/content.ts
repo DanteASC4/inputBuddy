@@ -8,6 +8,7 @@ import { infoLog } from "@u/styled-log";
 import { mount, unmount } from "svelte";
 import { browser } from "wxt/browser";
 
+import { ContentScriptContext } from "#imports";
 import { Contentstate, ScannerOutcome } from "$lib/stores/content.svelte";
 
 const INPUT_SELECTOR =
@@ -15,6 +16,31 @@ const INPUT_SELECTOR =
 
 const SCAN_DEBOUNCE_MS = 250;
 const PARTIAL_MATCH_THRESHOLD = 0.78;
+
+let floatingMenu: Awaited<ReturnType<typeof createShadowRootUi>> | null = null;
+
+const mountFloatingMenu = async (ctx: ContentScriptContext) => {
+  if (floatingMenu) return;
+
+  floatingMenu = await createShadowRootUi(ctx, {
+    name: "inputbuddy-menu",
+    position: "inline",
+    anchor: "body",
+    onMount: (container) => {
+      return mount(InjectedMenu, { target: container });
+    },
+    onRemove: (app) => {
+      if (app) unmount(app);
+    },
+  });
+
+  floatingMenu.mount();
+};
+
+const unmountFloatingMenu = () => {
+  floatingMenu?.remove();
+  floatingMenu = null;
+};
 
 const nodeEligible = (n: Node): boolean => {
   if (!(n instanceof Element)) return false;
@@ -111,6 +137,16 @@ const scanAndFill = async () => {
   }
 };
 
+//  ▄████████  ▄██████▄  ███▄▄▄▄       ███        ▄████████ ███▄▄▄▄       ███
+// ███    ███ ███    ███ ███▀▀▀██▄ ▀█████████▄   ███    ███ ███▀▀▀██▄ ▀█████████▄
+// ███    █▀  ███    ███ ███   ███    ▀███▀▀██   ███    █▀  ███   ███    ▀███▀▀██
+// ███        ███    ███ ███   ███     ███   ▀  ▄███▄▄▄     ███   ███     ███   ▀
+// ███        ███    ███ ███   ███     ███     ▀▀███▀▀▀     ███   ███     ███
+// ███    █▄  ███    ███ ███   ███     ███       ███    █▄  ███   ███     ███
+// ███    ███ ███    ███ ███   ███     ███       ███    ███ ███   ███     ███
+// ████████▀   ▀██████▀   ▀█   █▀     ▄████▀     ██████████  ▀█   █▀     ▄████▀
+//
+
 export default defineContentScript({
   matches: ["<all_urls>"],
   cssInjectionMode: "ui",
@@ -164,11 +200,17 @@ export default defineContentScript({
           startAuto();
           await reloadAndRescan();
         }
+
+        if (settings.enabled && settings.floatingMenuEnabled) {
+          await mountFloatingMenu(ctx);
+        } else {
+          unmountFloatingMenu();
+        }
         return;
       }
 
       if (profileChanged || answersChanged) {
-        reloadAndRescan();
+        await reloadAndRescan();
       }
     });
 
@@ -183,24 +225,28 @@ export default defineContentScript({
 
     (async () => {
       const settings = await getSettings();
-      if (settings.autoFillEnabled) {
+      if (settings.enabled && settings.autoFillEnabled) {
         startAuto();
+      }
+
+      if (settings.enabled && settings.floatingMenuEnabled) {
+        await mountFloatingMenu(ctx);
       }
     })();
 
-    //? Injected Menu
-    const ui = await createShadowRootUi(ctx, {
-      name: "inputbuddy-menu",
-      position: "inline",
-      anchor: "body",
-      onMount: (container) => {
-        return mount(InjectedMenu, { target: container });
-      },
-      onRemove: (app) => {
-        if (app) unmount(app);
-      },
-    });
+    // //? Injected Menu
+    // floatingMenu = await createShadowRootUi(ctx, {
+    //   name: "inputbuddy-menu",
+    //   position: "inline",
+    //   anchor: "body",
+    //   onMount: (container) => {
+    //     return mount(InjectedMenu, { target: container });
+    //   },
+    //   onRemove: (app) => {
+    //     if (app) unmount(app);
+    //   },
+    // });
 
-    ui.mount();
+    // floatingMenu.mount();
   },
 });
