@@ -16,6 +16,13 @@
   });
 
   const ready = Appstate.init();
+
+  $effect(() => {
+    document.documentElement.setAttribute(
+      "data-font",
+      Appstate.settings.fontStyle,
+    );
+  });
 </script>
 
 <main id="app" class="min-h-full w-full p-4 text-sm">
@@ -25,7 +32,7 @@
         InputBuddy
       </span>
     </div>
-    <h1 class="text-2xl font-semibold">Autofill your repeat answers</h1>
+    <h1 class="text-2xl font-semibold">Autofill repeat answers</h1>
     <p class="text-neutral-content mt-1 text-sm italic opacity-70">
       Save common answers once, then reuse them across any forms.
     </p>
@@ -37,8 +44,8 @@
     <ScanNowButton />
     <AnswerForm suggestions={trueRecommendations} />
     <AnswerList />
-    <Settings />
     <Profiles />
+    <Settings />
   {:catch}
     <p>Failed to initialize!</p>
   {/await}

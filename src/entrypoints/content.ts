@@ -233,20 +233,5 @@ export default defineContentScript({
         await mountFloatingMenu(ctx);
       }
     })();
-
-    // //? Injected Menu
-    // floatingMenu = await createShadowRootUi(ctx, {
-    //   name: "inputbuddy-menu",
-    //   position: "inline",
-    //   anchor: "body",
-    //   onMount: (container) => {
-    //     return mount(InjectedMenu, { target: container });
-    //   },
-    //   onRemove: (app) => {
-    //     if (app) unmount(app);
-    //   },
-    // });
-
-    // floatingMenu.mount();
   },
 });

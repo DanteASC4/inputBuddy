@@ -8,6 +8,14 @@
   import ToggleSetting from "./ToggleSetting.svelte";
 
   let transientSettings: Settings = $state(Appstate.settings);
+  let fontStyleChoice = $state(Appstate.settings.fontStyle === "serif");
+
+  $effect(() => {
+    if (fontStyleChoice) transientSettings.fontStyle = "serif";
+    else transientSettings.fontStyle = "sans-serif";
+
+    updateAllSettings();
+  });
 
   function updateAllSettings() {
     Appstate.changeSettings(transientSettings);
@@ -75,6 +83,35 @@
     settingName="Indicate Filled"
     settingDesc="Toggles adding a green outline to any inputs that were filled by InputBuddy."
   />
+
+  <div class="mt-4 flex items-center justify-between">
+    <div>
+      <div
+        class="text-neutral-content text-sm font-semibold tracking-[0.2em] uppercase"
+      >
+        Font Style
+      </div>
+      <div class="text-neutral-content text-sm opacity-70">
+        Change whether the extension's font is Serif or Sans-Serif!
+      </div>
+    </div>
+    <label class="swap cursor-pointer">
+      <input bind:checked={fontStyleChoice} type="checkbox" />
+
+      <span
+        style="font-family: 'Besley', serif;"
+        class="swap-on border-secondary flex size-12 items-center justify-center rounded-lg border-2 border-dotted text-lg"
+      >
+        Aa
+      </span>
+      <span
+        style="font-family: 'TikTok Sans', sans-serif;"
+        class="swap-off border-secondary flex size-12 items-center justify-center rounded-lg border-2 border-dotted text-lg"
+      >
+        Aa
+      </span>
+    </label>
+  </div>
 
   <div class="divider mt-3"></div>
 

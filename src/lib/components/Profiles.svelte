@@ -32,7 +32,7 @@
   }
 </script>
 
-<CollapseWrapper title="Answers Profiles">
+<CollapseWrapper title="Answer Profiles">
   <Subtext>
     Save sets of labels & answers under profiles for easy switching &
     separation!

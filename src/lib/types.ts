@@ -34,6 +34,7 @@ export const SettingsSchema = v.object({
   autoFillEnabled: v.fallback(v.boolean(), true),
   floatingMenuEnabled: v.fallback(v.boolean(), true),
   matchMode: v.fallback(MatchModeSchema, "fuzzy"),
+  fontStyle: v.fallback(v.picklist(["serif", "sans-serif"]), "serif"),
   keepOpen: v.fallback(v.boolean(), false),
   debug: v.fallback(v.boolean(), false),
   indicateFilled: v.fallback(v.boolean(), true),
@@ -60,7 +61,7 @@ export type AppState = {
   loadSettings: () => Promise<void>;
   loadProfiles: () => Promise<void>;
   loadLastProfile: () => Promise<void>;
-  init: () => Promise<void>;
+  init: () => Promise<true>;
   saveAnswer: (label: string, value: string, id?: string) => Promise<void>;
   removeAnswer: (id: string) => Promise<void>;
   changeSettings: (settings: Partial<Settings>) => Promise<void>;

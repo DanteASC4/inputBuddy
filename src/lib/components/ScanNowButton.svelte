@@ -39,7 +39,7 @@
       debouncedSetText("Fill Current Page", 4000);
       return;
     }
-    if (Appstate.settings.enabled === false) {
+    if (!Appstate.settings.enabled) {
       btnText = "Extension filling disabled!";
       animate(theBtn, {
         scale: [1, 1.1, 1],

@@ -138,6 +138,7 @@
   bind:this={pane}
   onmouseleave={hidePane}
   data-theme="vdark"
+  data-font="serif"
   class="inset-ring-secondary bubble pointer-events-none absolute top-0 left-0 z-1000 m-2 h-64 w-96 rounded-lg p-4 shadow-xl inset-ring-4"
   style="opacity: 0;"
 >

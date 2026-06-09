@@ -21,9 +21,11 @@ V1:
 - [x] Defer scan until page done loading
   - [x] Current methodology is better actually (mutation observer)
 - [x] Track inputs per-page and don't keep re-scanning & filling unless new input added (or manual scan activated)
-- [ ] New Feature: Themes
+- [ ] Enhance & refine visuals
+- [ ] Utilize lucide icons
 - [ ] Figure out something for floating menu when match mode is `"exact"` or `"similar"`
 - [ ] Test drive it myself!
+- [ ] Tiny feedback form
 
 Future / ideas:
 
@@ -48,3 +50,5 @@ Future / ideas:
   - Move debug setting here
 - nlp matching?
   - would likely be a paid feature
+- New Feature: Themes
+- Site/page exclusion list?

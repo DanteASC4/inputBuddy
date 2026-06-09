@@ -37,51 +37,43 @@
 }
 
 @font-face {
-  font-family: "Crimson Text";
+  font-family: "Besley";
   font-style: normal;
-  src: url("/fonts/Crimson_Text/CrimsonText-Regular.ttf") format("truetype");
+  font-weight: 400 900;
+  font-display: swap;
+  src: url("/fonts/Besley/Besley-VariableFont_wght.ttf") format("truetype");
 }
 
 @font-face {
-  font-family: "Crimson Text";
+  font-family: "Besley";
   font-style: italic;
-  font-weight: 400;
-  src: url("/fonts/Crimson_Text/CrimsonText-Italic.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: "Crimson Text";
-  font-style: normal;
-  font-weight: 600;
-  src: url("/fonts/Crimson_Text/CrimsonText-SemiBold.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: "Crimson Text";
-  font-style: italic;
-  font-weight: 600;
-  src: url("/fonts/Crimson_Text/CrimsonText-SemiBoldItalic.ttf")
+  font-weight: 400 900;
+  font-display: swap;
+  src: url("/fonts/Besley/Besley-Italic-VariableFont_wght.ttf")
     format("truetype");
 }
 
 @font-face {
-  font-family: "Crimson Text";
+  font-family: "TikTok Sans";
   font-style: normal;
-  font-weight: 700;
-  src: url("/fonts/Crimson_Text/CrimsonText-Bold.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: "Crimson Text";
-  font-style: italic;
-  font-weight: 700;
-  src: url("/fonts/Crimson_Text/CrimsonText-BoldItalic.ttf") format("truetype");
+  font-weight: 400 500 600 700 800 900;
+  font-display: swap;
+  src: url("/fonts/TikTok_Sans/TikTokSans-VariableFont_opsz,slnt,wdth,wght.ttf")
+    format("truetype");
 }
 
 @layer utilities {
   .font-mono {
     font-family: "Consolas", monospace;
   }
+}
+
+[data-font="serif"] {
+  --font-app: "Besley", serif;
+}
+
+[data-font="sans-serif"] {
+  --font-app: "TikTok Sans", serif;
 }
 
 html,
@@ -96,7 +88,8 @@ body {
   min-height: 520px;
   height: 100%;
   overflow: hidden;
-  font-family: "Crimson Text", serif;
+  font-family: var(--font-app);
+  font-optical-sizing: auto;
 }
 
 #app {

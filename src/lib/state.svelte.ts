@@ -1,4 +1,4 @@
-import type { AppState } from "@types";
+import type { Answer, AppState, Settings } from "@types";
 import {
   deleteAnswer,
   deleteProfile,
@@ -13,18 +13,19 @@ import {
 } from "@u/storage";
 import { infoLog } from "@u/styled-log";
 
-export const Appstate = $state<AppState>({
-  answers: [],
-  profiles: [],
+export const Appstate = $state({
+  answers: [] as Answer[],
+  profiles: [] as string[],
   settings: {
     enabled: true,
     autoFillEnabled: true,
     floatingMenuEnabled: true,
     matchMode: "partial",
+    fontStyle: "serif",
     keepOpen: false,
     debug: true,
     indicateFilled: true,
-  },
+  } satisfies Settings,
   isSaving: false,
   saveError: "",
   currentProfile: "default",
@@ -52,6 +53,7 @@ export const Appstate = $state<AppState>({
       this.loadProfiles(),
       this.loadLastProfile(),
     ]);
+    return true;
   },
   async saveAnswer(label: string, value: string, id?: string) {
     if (!label.trim() || !value.trim()) return;
@@ -129,4 +131,4 @@ export const Appstate = $state<AppState>({
       console.error(err);
     }
   },
-});
+} satisfies AppState);
