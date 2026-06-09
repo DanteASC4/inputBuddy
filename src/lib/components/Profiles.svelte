@@ -23,6 +23,7 @@
     newProfileName = "";
     busy = false;
   }
+
   async function triggerDelete() {
     if (busy) return;
     busy = true;

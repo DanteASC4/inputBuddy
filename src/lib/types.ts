@@ -31,6 +31,8 @@ export type MatchMode = v.InferOutput<typeof MatchModeSchema>;
 
 export const SettingsSchema = v.object({
   enabled: v.fallback(v.boolean(), true),
+  autoFillEnabled: v.fallback(v.boolean(), true),
+  floatingMenuEnabled: v.fallback(v.boolean(), true),
   matchMode: v.fallback(MatchModeSchema, "fuzzy"),
   keepOpen: v.fallback(v.boolean(), false),
   debug: v.fallback(v.boolean(), false),
@@ -76,4 +78,5 @@ export type ContentState = {
   answers: Answer[];
   profile: string;
   indicateFilled: Settings["indicateFilled"];
+  seenInputs: WeakSet<FillableElement>;
 };

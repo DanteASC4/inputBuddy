@@ -1,39 +1,17 @@
 <script lang="ts">
+  import type { Settings } from "@types";
+
   import { Appstate } from "$lib/state.svelte";
 
   import CollapseWrapper from "./CollapseWrapper.svelte";
   import Subtext from "./Subtext.svelte";
+  import ToggleSetting from "./ToggleSetting.svelte";
 
-  // TODO can make this more dynamic for sure but this works perfectly fine for now
-  let enabled = $state(Appstate.settings.enabled);
-  let matchMode = $state(Appstate.settings.matchMode);
-  let keepOpen = $state(Appstate.settings.keepOpen);
-  let debug = $state(Appstate.settings.debug);
-  let indicateFilled = $state(Appstate.settings.indicateFilled);
+  let transientSettings: Settings = $state(Appstate.settings);
 
-  function updateEnabled() {
-    Appstate.changeSettings({ enabled });
+  function updateAllSettings() {
+    Appstate.changeSettings(transientSettings);
   }
-
-  function updateKeepOpen() {
-    Appstate.changeSettings({ keepOpen });
-  }
-
-  function updateMatchMode() {
-    Appstate.changeSettings({ matchMode });
-  }
-
-  function updateDebug() {
-    Appstate.changeSettings({ debug });
-  }
-
-  function updateInidcateFilled() {
-    Appstate.changeSettings({ indicateFilled });
-  }
-
-  $effect(() => {
-    console.log("changed");
-  });
 </script>
 
 {#snippet radioLabel(title: string, subtitle?: string)}
@@ -56,81 +34,47 @@
 {/snippet}
 
 <CollapseWrapper title="Settings" class="space-y-2">
-  <div class="mt-4 flex items-center justify-between">
-    <div>
-      <div
-        class="text-neutral-content text-sm font-semibold tracking-[0.2em] uppercase"
-      >
-        Autofill
-      </div>
-      <div class="text-neutral-content text-sm opacity-70">
-        Fill matching labels on detected forms.
-      </div>
-    </div>
-    <input
-      bind:checked={enabled}
-      onchange={updateEnabled}
-      type="checkbox"
-      class="toggle toggle-secondary"
-    />
-  </div>
+  <ToggleSetting
+    bind:checked={transientSettings.enabled}
+    onchange={updateAllSettings}
+    settingName="Filling Enabled"
+    settingDesc="Disabling this will prevent any form of filling inputs, whether automatic or manual."
+  />
 
-  <div class="flex items-center justify-between">
-    <div>
-      <div
-        class="text-neutral-content text-sm font-semibold tracking-[0.2em] uppercase"
-      >
-        Keep open
-      </div>
-      <div class="text-neutral-content text-sm opacity-70">
-        Keep the app sections open at all times.
-      </div>
-    </div>
-    <input
-      bind:checked={keepOpen}
-      onchange={updateKeepOpen}
-      type="checkbox"
-      class="toggle toggle-secondary mt-2"
-    />
-  </div>
+  <ToggleSetting
+    bind:checked={transientSettings.autoFillEnabled}
+    onchange={updateAllSettings}
+    settingName="Autofill"
+    settingDesc="Enables whether the extension will automatically attempt to fill inputs on pages with found inputs."
+  />
 
-  <div class="mt-4 flex items-center justify-between">
-    <div>
-      <div
-        class="text-neutral-content text-sm font-semibold tracking-[0.2em] uppercase"
-      >
-        Debug Mode
-      </div>
-      <div class="text-neutral-content text-sm opacity-70">
-        Enable browser console logging of various app actions.
-      </div>
-    </div>
-    <input
-      bind:checked={debug}
-      onchange={updateDebug}
-      type="checkbox"
-      class="toggle toggle-secondary"
-    />
-  </div>
-  <div class="mt-4 flex items-center justify-between">
-    <div>
-      <div
-        class="text-neutral-content text-sm font-semibold tracking-[0.2em] uppercase"
-      >
-        Indicate Filled
-      </div>
-      <div class="text-neutral-content text-sm opacity-70">
-        Toggles adding a green outline to any inputs that were filled by
-        InputBuddy.
-      </div>
-    </div>
-    <input
-      bind:checked={indicateFilled}
-      onchange={updateInidcateFilled}
-      type="checkbox"
-      class="toggle toggle-secondary"
-    />
-  </div>
+  <ToggleSetting
+    bind:checked={transientSettings.floatingMenuEnabled}
+    onchange={updateAllSettings}
+    settingName="Floating Menu"
+    settingDesc="Decides whether the floating menu is shown for inputs that didn't have a confident match."
+  />
+
+  <ToggleSetting
+    bind:checked={transientSettings.keepOpen}
+    onchange={updateAllSettings}
+    settingName="Keep open"
+    settingDesc="Keep the app sections open at all times."
+  />
+
+  <ToggleSetting
+    bind:checked={transientSettings.debug}
+    onchange={updateAllSettings}
+    settingName="Debug Mode"
+    settingDesc="Enable browser console logging of various app actions."
+  />
+
+  <ToggleSetting
+    bind:checked={transientSettings.indicateFilled}
+    onchange={updateAllSettings}
+    settingName="Indicate Filled"
+    settingDesc="Toggles adding a green outline to any inputs that were filled by InputBuddy."
+  />
 
   <div class="divider mt-3"></div>
 
@@ -169,8 +113,8 @@
     <fieldset class="fieldset">
       <label class="flex cursor-pointer items-center gap-2">
         <input
-          bind:group={matchMode}
-          onchange={updateMatchMode}
+          bind:group={transientSettings.matchMode}
+          onchange={updateAllSettings}
           value="fuzzy"
           type="radio"
           class="radio radio-sm radio-secondary"
@@ -182,8 +126,8 @@
       </label>
       <label class="flex cursor-pointer items-center gap-2">
         <input
-          bind:group={matchMode}
-          onchange={updateMatchMode}
+          bind:group={transientSettings.matchMode}
+          onchange={updateAllSettings}
           value="partial"
           type="radio"
           class="radio radio-sm radio-secondary"
@@ -195,8 +139,8 @@
       </label>
       <label class="flex cursor-pointer items-center gap-2">
         <input
-          bind:group={matchMode}
-          onchange={updateMatchMode}
+          bind:group={transientSettings.matchMode}
+          onchange={updateAllSettings}
           value="similar"
           type="radio"
           class="radio radio-sm radio-secondary"
@@ -208,8 +152,8 @@
       </label>
       <label class="flex cursor-pointer items-center gap-2">
         <input
-          bind:group={matchMode}
-          onchange={updateMatchMode}
+          bind:group={transientSettings.matchMode}
+          onchange={updateAllSettings}
           value="exact"
           type="radio"
           class="radio radio-sm radio-secondary"

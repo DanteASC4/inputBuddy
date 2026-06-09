@@ -16,11 +16,6 @@
   });
 
   const ready = Appstate.init();
-  $inspect(ready);
-
-  /* onMount(async () => {
-    await Appstate.init();
-  }); */
 </script>
 
 <main id="app" class="min-h-full w-full p-4 text-sm">

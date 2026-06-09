@@ -17,10 +17,12 @@ V1:
 - [x] Fix profiles UX
 - [x] Go through user flow
 - [ ] Build test cases for matching strategies from real pages
-- [ ] Fix the "autofill" setting disabling filling entirely
-- [ ] Defer scan until page done loading
-- [ ] Track inputs per-page and don't keep re-scanning & filling unless new input added (or manual scan activated)
+- [x] Fix the "autofill" setting disabling filling entirely
+- [x] Defer scan until page done loading
+  - [x] Current methodology is better actually (mutation observer)
+- [x] Track inputs per-page and don't keep re-scanning & filling unless new input added (or manual scan activated)
 - [ ] New Feature: Themes
+- [ ] Figure out something for floating menu when match mode is `"exact"` or `"similar"`
 - [ ] Test drive it myself!
 
 Future / ideas:
@@ -32,5 +34,10 @@ Future / ideas:
   - `<input type="radio">`
   - `<input type="checkbox">`
 - Tie match modes to profiles
+- New Feature: "Reset to Default" button in settings
+- New Feature: Advanced settings
+  - Match threshold?
+  - Indicate filled color
+  - Move debug setting here
 - nlp matching?
   - would likely be a paid feature

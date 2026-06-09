@@ -18,6 +18,8 @@ export const Appstate = $state<AppState>({
   profiles: [],
   settings: {
     enabled: true,
+    autoFillEnabled: true,
+    floatingMenuEnabled: true,
     matchMode: "partial",
     keepOpen: false,
     debug: true,

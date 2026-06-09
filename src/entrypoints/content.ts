@@ -8,7 +8,6 @@ import { infoLog } from "@u/styled-log";
 import { mount, unmount } from "svelte";
 import { browser } from "wxt/browser";
 
-import { Appstate } from "$lib/state.svelte";
 import { Contentstate, ScannerOutcome } from "$lib/stores/content.svelte";
 
 const INPUT_SELECTOR =
@@ -17,11 +16,45 @@ const INPUT_SELECTOR =
 const SCAN_DEBOUNCE_MS = 250;
 const PARTIAL_MATCH_THRESHOLD = 0.78;
 
+const nodeEligible = (n: Node): boolean => {
+  if (!(n instanceof Element)) return false;
+  if (n.matches(INPUT_SELECTOR)) return true;
+  return Boolean(n.querySelector(INPUT_SELECTOR));
+};
+
+const mutationEligible = (mutation: MutationRecord): boolean => {
+  if (mutation.type === "childList") {
+    return Array.from(mutation.addedNodes).some(nodeEligible);
+  }
+  if (mutation.type === "attributes") {
+    const target = mutation.target;
+    if (!(target instanceof Element)) return false;
+    if (target.matches(INPUT_SELECTOR)) return true;
+    if (target.matches("label")) return true;
+  }
+  return false;
+};
+
+const resetScanState = () => {
+  Contentstate.seenInputs = new WeakSet();
+  ScannerOutcome.notFilled = new WeakMap();
+  ScannerOutcome.filled = [];
+};
+
+const reloadAndRescan = async () => {
+  await loadContentAnswers();
+  resetScanState();
+  const settings = await getSettings();
+  if (settings.enabled && settings.autoFillEnabled) {
+    scheduleScan();
+  }
+};
+
 const loadContentAnswers = async () => {
   const profile = (await getLastProfile()) ?? "default";
   Contentstate.profile = profile;
   Contentstate.answers = await getAnswers(profile);
-  Contentstate.indicateFilled = Appstate.settings.indicateFilled;
+  Contentstate.indicateFilled = (await getSettings()).indicateFilled;
 };
 
 let scanTimeout: number | null = null;
@@ -54,9 +87,11 @@ const scanAndFill = async () => {
   for (const element of inputs) {
     if (!isEligibleInput(element)) continue;
     if (element.value?.trim()) continue;
+    if (Contentstate.seenInputs.has(element)) continue;
 
     const candidates = getLabelCandidates(element);
     if (!candidates.length) continue;
+    Contentstate.seenInputs.add(element);
 
     const winners = findBestAnswer(candidates, answers, settings.matchMode);
     if (!winners.first) continue;
@@ -66,11 +101,6 @@ const scanAndFill = async () => {
       settings.matchMode === "exact" ? 1 : PARTIAL_MATCH_THRESHOLD;
 
     if (winners.first.score < threshold) {
-      // ScannerOutcome.notFilled.push(element);
-      // console.group("Not Filling:");
-      // console.log(element);
-      // console.log(winners);
-      // console.groupEnd();
       ScannerOutcome.notFilled.set(element, winners);
       continue;
     }
@@ -78,11 +108,6 @@ const scanAndFill = async () => {
     fillInput(element, winners.first.answer.value);
 
     ScannerOutcome.filled.push(element);
-    // Filled.elements.push(element);
-    // Filled.elements.set(element, {
-    //   answer: winners.first.answer.value,
-    //   label: winners.first.answer.label,
-    // });
   }
 };
 
@@ -94,11 +119,22 @@ export default defineContentScript({
     let observer: MutationObserver | null = null;
     const startAuto = () => {
       if (observer) return;
-      observer = new MutationObserver(() => scheduleScan());
+      observer = new MutationObserver((mutations) => {
+        const hasNewNodes = mutations.some(mutationEligible);
+        if (hasNewNodes) scheduleScan();
+      });
       observer.observe(document.documentElement, {
         childList: true,
         subtree: true,
         attributes: true,
+        attributeFilter: [
+          "placeholder",
+          "aria-label",
+          "aria-labelledby",
+          "name",
+          "id",
+          "for",
+        ],
       });
       scheduleScan();
     };
@@ -113,33 +149,26 @@ export default defineContentScript({
     browser.storage.onChanged.addListener(async (changes, areaName) => {
       if (areaName !== "local") return;
 
-      if (changes.settings) {
-        const settings = await getSettings();
-        if (settings.enabled) {
-          startAuto();
-        } else {
+      const settings = await getSettings();
+      const activeProfile = (await getLastProfile()) ?? "default";
+      const settingsChanged = "settings" in changes;
+      const profileChanged = "profiles" in changes || "lastProfile" in changes;
+      const answersChanged = activeProfile in changes;
+
+      if (settingsChanged) {
+        if (!settings.enabled || !settings.autoFillEnabled) {
           stopAuto();
+          await loadContentAnswers();
+          resetScanState();
+        } else {
+          startAuto();
+          await reloadAndRescan();
         }
+        return;
       }
 
-      if (observer) {
-        if (changes.profiles || changes.lastProfile || changes.default) {
-          scheduleScan();
-          return;
-        }
-
-        const activeProfile = (await getLastProfile()) ?? "default";
-        if (changes[activeProfile]) {
-          scheduleScan();
-        }
-
-        if (
-          changes?.profiles ||
-          changes?.lastProfile ||
-          changes[activeProfile]
-        ) {
-          await loadContentAnswers();
-        }
+      if (profileChanged || answersChanged) {
+        reloadAndRescan();
       }
     });
 
@@ -154,7 +183,7 @@ export default defineContentScript({
 
     (async () => {
       const settings = await getSettings();
-      if (settings.enabled) {
+      if (settings.autoFillEnabled) {
         startAuto();
       }
     })();
