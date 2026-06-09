@@ -35,9 +35,16 @@ Future / ideas:
   - `<input type="checkbox">`
 - Tie match modes to profiles
 - New Feature: "Reset to Default" button in settings
+- New Feature: More settings
+  - "skip filled"
+  - indicate filled
+    - style option
+      - moving border
+      - glow
+      - solid outline
+    - color
 - New Feature: Advanced settings
   - Match threshold?
-  - Indicate filled color
   - Move debug setting here
 - nlp matching?
   - would likely be a paid feature
