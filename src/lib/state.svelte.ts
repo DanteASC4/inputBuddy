@@ -19,7 +19,7 @@ export const Appstate = $state({
   settings: {
     enabled: true,
     autoFillEnabled: true,
-    floatingMenuEnabled: true,
+    floatingMenuEnabled: false,
     matchMode: "partial",
     fontStyle: "serif",
     keepOpen: false,

@@ -44,11 +44,15 @@
     const from = pane.getBoundingClientRect();
     const to = el.getBoundingClientRect();
 
+    console.log(from);
+    console.log(to);
+    console.log(el);
+
     animate(pane, {
       duration: 1000,
       easing: "inOutCirc",
       x: [from.x, to.x + to.width * 0.5 - from.width * 0.5],
-      y: [from.y, to.y + to.height + 12],
+      y: [from.y, to.bottom + 12],
       opacity: [0, 1],
       onComplete: () => {
         pane!.classList.remove("pointer-events-none");
@@ -139,7 +143,7 @@
   onmouseleave={hidePane}
   data-theme="vdark"
   data-font="serif"
-  class="inset-ring-secondary bubble pointer-events-none absolute top-0 left-0 z-1000 m-2 h-64 w-96 rounded-lg p-4 shadow-xl inset-ring-4"
+  class="inset-ring-secondary bubble pointer-events-none fixed top-0 left-0 z-1000 m-2 h-64 w-96 rounded-lg p-4 shadow-xl inset-ring-4"
   style="opacity: 0;"
 >
   <div class="tabs tabs-lift size-full">
@@ -160,7 +164,7 @@
                 class="btn btn-outline btn-accent"
                 onclick={() => handleSuggestionClick(first)}
               >
-                {currentSuggestions.first}
+                {first}
               </button>
             </li>
           {/if}
@@ -171,7 +175,7 @@
                 class="btn btn-outline btn-accent"
                 onclick={() => handleSuggestionClick(second)}
               >
-                {currentSuggestions.second}
+                {second}
               </button>
             </li>
           {/if}
@@ -182,7 +186,7 @@
                 class="btn btn-outline btn-accent"
                 onclick={() => handleSuggestionClick(third)}
               >
-                {currentSuggestions.third}
+                {third}
               </button>
             </li>
           {/if}
@@ -204,7 +208,7 @@
       Search Saved Answers
     </label>
     <div class="tab-content bg-base-100 border-base-200 px-4 py-2">
-      <div class="flex min-h-0 w-full flex-col">
+      <div class="flex w-full flex-col">
         <input
           class="input input-sm active:input-secondary focus:input-secondary mt-3 w-full shrink-0"
           placeholder="Start typing to search saved answers"
@@ -234,7 +238,7 @@
             No answers match your filter.
           </div>
         {:else}
-          <div class="mt-4 flex-1 overflow-y-auto pr-1">
+          <div class="mt-4 max-h-24 overflow-y-auto pr-1">
             <div class="grid gap-3">
               {#each matchingAnswers as answer (answer.id)}
                 <button

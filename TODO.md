@@ -21,9 +21,10 @@ V1:
 - [x] Defer scan until page done loading
   - [x] Current methodology is better actually (mutation observer)
 - [x] Track inputs per-page and don't keep re-scanning & filling unless new input added (or manual scan activated)
-- [ ] Enhance & refine visuals
-- [ ] Utilize lucide icons
+- [ ] (Ongoing) Enhance & refine visuals
+  - Utilize lucide icons
 - [ ] Figure out something for floating menu when match mode is `"exact"` or `"similar"`
+- [ ] Remove job-specific recs
 - [ ] Test drive it myself!
 - [ ] Tiny feedback form
 
@@ -48,6 +49,12 @@ Future / ideas:
 - New Feature: Advanced settings
   - Match threshold?
   - Move debug setting here
+- New Feature: Security levels
+  - Example levels:
+    - Max security -> Needs password to use, will only work on current page & self lock after 60s or so
+    - Medium security -> Needs password to use, will self lock when browser loses focus
+    - Low security -> Needs password to use, then stays open until browser closed
+  - Recovery codes
 - nlp matching?
   - would likely be a paid feature
 - New Feature: Themes
