@@ -3,6 +3,12 @@ import type { Answer, MatchMode, MatchResult, Winners } from "@types";
 export const cleanText = (text: string) =>
   text.replace(/[^A-z0-9]/g, "").toLowerCase();
 
+export const tokenize = (text: string) =>
+  text
+    .toLowerCase()
+    .split(/[^A-z0-9]+/)
+    .filter(Boolean);
+
 //? True exact
 export const trueExactText = (text1: string, text2: string) =>
   text1.trim() === text2.trim();
@@ -33,6 +39,23 @@ export const diceCoefficient = (text1: string, text2: string) => {
 
 //? Fuzzy Matching
 const isSep = (c: string) => c === " " || c === "-" || c === "_";
+
+const tokenScorer = (look: string, inString: string) => {
+  const lookTokens = new Set(tokenize(look));
+  const inTokens = new Set(tokenize(inString));
+  if (!lookTokens.size || !inTokens.size) return 0;
+
+  let matches = 0;
+  for (const token of lookTokens) {
+    if (inTokens.has(token)) matches++;
+  }
+
+  //? token dice
+  return (2 * matches) / (lookTokens.size + inTokens.size);
+
+  //? token jaccard
+  // return matches / (lookTokens.size + inTokens.size - matches)
+};
 
 export function fuzzyScorer(look: string, inString: string) {
   if (look === inString) return 1;
@@ -80,7 +103,9 @@ export function fuzzyScorer(look: string, inString: string) {
     }
   }
 
-  return Math.max(0, score / maxPossible);
+  const tokenScore = tokenScorer(look, inString);
+
+  return Math.max(tokenScore, Math.max(0, score / maxPossible));
 }
 
 export function fuzzy(source: string, targets: string[]) {

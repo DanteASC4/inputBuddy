@@ -44,12 +44,8 @@
     const from = pane.getBoundingClientRect();
     const to = el.getBoundingClientRect();
 
-    console.log(from);
-    console.log(to);
-    console.log(el);
-
     animate(pane, {
-      duration: 1000,
+      duration: 500,
       easing: "inOutCirc",
       x: [from.x, to.x + to.width * 0.5 - from.width * 0.5],
       y: [from.y, to.bottom + 12],
@@ -153,7 +149,7 @@
       Most Likely
     </label>
     <div class="tab-content bg-base-100 border-base-200 p-4">
-      <ul class="menu row-span-4 size-full">
+      <ul class="menu row-span-4 size-full space-y-0.5">
         {#if currentSuggestions}
           {@const first = currentSuggestions?.first?.answer.value}
           {@const second = currentSuggestions?.second?.answer.value}
@@ -161,7 +157,7 @@
           {#if first}
             <li>
               <button
-                class="btn btn-outline btn-accent"
+                class="btn btn-outline btn-secondary"
                 onclick={() => handleSuggestionClick(first)}
               >
                 {first}
@@ -172,7 +168,7 @@
           {#if second}
             <li>
               <button
-                class="btn btn-outline btn-accent"
+                class="btn btn-outline btn-secondary"
                 onclick={() => handleSuggestionClick(second)}
               >
                 {second}
@@ -183,7 +179,7 @@
           {#if third}
             <li>
               <button
-                class="btn btn-outline btn-accent"
+                class="btn btn-outline btn-secondary"
                 onclick={() => handleSuggestionClick(third)}
               >
                 {third}
@@ -243,7 +239,7 @@
               {#each matchingAnswers as answer (answer.id)}
                 <button
                   onclick={() => fillFromSaved(answer.value)}
-                  class="btn btn-secondary btn-outline grid size-full h-10 cursor-pointer grid-cols-5 grid-rows-1"
+                  class="btn btn-secondary grid size-full h-10 cursor-pointer grid-cols-5 grid-rows-1"
                 >
                   <span
                     class="text-secondary-content text-shadow-secondary-content col-span-2 text-base font-bold"

@@ -46,6 +46,9 @@ describe("dice coefficient matching", () => {
 describe("fuzzy matching", () => {
   it("should work", () => {
     console.log(fuzzyScorer("phone", "peohn"));
+    console.log(fuzzyScorer('first name', 'legal name'));
+    console.log(fuzzyScorer('first name', 'firgal name'));
+    console.log(fuzzyScorer('name', 'firgal name'));
     expect(fuzzyScorer("phone", "peohn")).toBeLessThanOrEqual(0.2);
     expect(fuzzyScorer("phone", "phone")).toBeGreaterThanOrEqual(1);
   });
