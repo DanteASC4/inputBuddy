@@ -1,3 +1,19 @@
+/*
+Copyright (C) 2026 Dante Rivera
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
 import "./app.css";
 
 import InjectedMenu from "@c/InjectedMenu.svelte";
@@ -15,7 +31,7 @@ const INPUT_SELECTOR =
   'input[type="text"], input[type="email"], input[type="tel"], input[type="url"], input[type="search"], textarea';
 
 const SCAN_DEBOUNCE_MS = 250;
-const PARTIAL_MATCH_THRESHOLD = 0.78;
+const PARTIAL_MATCH_THRESHOLD = 0.65;
 
 let floatingMenu: Awaited<ReturnType<typeof createShadowRootUi>> | null = null;
 

@@ -2,7 +2,7 @@
   "name": "InputBuddy",
   "description": "manifest.json description",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "wxt",
@@ -14,6 +14,7 @@
     "dev:chrome": "wxt -b chrome",
     "build:chrome": "wxt build -b chrome",
     "zip:chrome": "wxt zip -b chrome",
+    "zip:all": "bun run zip:chrome && bun run zip:firefox",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier . --check",

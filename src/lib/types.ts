@@ -32,7 +32,7 @@ export type MatchMode = v.InferOutput<typeof MatchModeSchema>;
 export const SettingsSchema = v.object({
   enabled: v.fallback(v.boolean(), true),
   autoFillEnabled: v.fallback(v.boolean(), true),
-  floatingMenuEnabled: v.fallback(v.boolean(), true),
+  floatingMenuEnabled: v.fallback(v.boolean(), false),
   matchMode: v.fallback(MatchModeSchema, "fuzzy"),
   fontStyle: v.fallback(v.picklist(["serif", "sans-serif"]), "serif"),
   keepOpen: v.fallback(v.boolean(), false),
