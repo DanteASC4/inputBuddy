@@ -40,6 +40,8 @@
 
   function moveTo(el: HTMLElement) {
     if (!pane) return;
+    // More often than not text areas don't need the floating menu.
+    if(el.tagName === 'textarea') return;
 
     const from = pane.getBoundingClientRect();
     const to = el.getBoundingClientRect();
