@@ -14,6 +14,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+import { infoLog } from "@u/styled-log";
 import { browser } from "wxt/browser";
 
 const setWarn = async () => {
@@ -79,10 +80,10 @@ browser.runtime.onMessage.addListener(async (message) => {
 });
 
 browser.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
-  console.log(changeInfo.status);
+  infoLog(changeInfo.status);
   if (changeInfo.status !== "complete") return;
-  console.log("Tab updated:", { tabId, changeInfo });
-  console.log(JSON.stringify(changeInfo));
+  infoLog("Tab updated:", { tabId, changeInfo });
+  infoLog(JSON.stringify(changeInfo));
 
   const currentUrl = tab.url ?? changeInfo.url ?? null;
   const actual = currentUrl ? new URL(currentUrl) : null;

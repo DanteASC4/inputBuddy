@@ -2,11 +2,11 @@
   <img src="/public/icon/icon.png" />
 </p>
 
-# <p align="center">OpenScreen</p>
+# <p align="center">InputBuddy</p>
 
 A free & open source extension for your convenience.
 
-- [OpenScreen](#openscreen)
+- [InputBuddy](#inputbuddy)
 - [What \& Why?](#what--why)
 - [Features](#features)
 - [Matchers](#matchers)
@@ -95,5 +95,5 @@ Instead you can:
 - Star this repo
 - Provide some constructive feedback [in the discussions](https://github.com/DanteASC4/inputBuddy/discussions)
 - Make a [contribution](./CONTRIBUTING.md)
-- Rate this extension 
+- Rate this extension
 - Share with a friend!

@@ -231,7 +231,7 @@ export default defineContentScript({
     });
 
     browser.runtime.onMessage.addListener((msg) => {
-      console.log("Content script received message:", msg);
+      infoLog("Content script received message:", msg);
       if (msg && typeof msg === "object" && "type" in msg) {
         if (msg.type === "START_AUTO") startAuto();
         if (msg.type === "STOP_AUTO") stopAuto();
