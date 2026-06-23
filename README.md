@@ -6,6 +6,8 @@
 
 A free & open source extension for your convenience.
 
+Chrome Install Link: Pending Review!
+
 - [InputBuddy](#inputbuddy)
 - [What \& Why?](#what--why)
 - [Features](#features)
