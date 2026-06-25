@@ -6,7 +6,7 @@
 
 A free & open source extension for your convenience.
 
-Chrome Install Link: Pending Review!
+[Install via the Chrome web store](https://chromewebstore.google.com/detail/ldbpijapdbfmmokfcfobijndliaoeoal?utm_source=item-share-cb)
 
 - [InputBuddy](#inputbuddy)
 - [What \& Why?](#what--why)
