@@ -9,5 +9,6 @@ export const Contentstate = $state<ContentState>({
   answers: [],
   profile: "default",
   indicateFilled: true,
-  seenInputs: new WeakSet()
+  seenInputs: new WeakSet(),
+  floatingMenu: false,
 });

@@ -80,4 +80,5 @@ export type ContentState = {
   profile: string;
   indicateFilled: Settings["indicateFilled"];
   seenInputs: WeakSet<FillableElement>;
+  floatingMenu: Settings["floatingMenuEnabled"];
 };

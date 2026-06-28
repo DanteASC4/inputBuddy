@@ -41,7 +41,7 @@
   function moveTo(el: HTMLElement) {
     if (!pane) return;
     // More often than not text areas don't need the floating menu.
-    if(el.tagName === 'textarea') return;
+    if (el.tagName === "textarea") return;
 
     const from = pane.getBoundingClientRect();
     const to = el.getBoundingClientRect();
@@ -93,13 +93,14 @@
   }
 
   function resizeMove() {
-    if (currentTarget) {
+    if (currentTarget && Contentstate.floatingMenu) {
       moveTo(currentTarget);
     }
   }
   const resizeMoveDeb = debounce({ delay: 100 }, resizeMove);
 
   $effect(() => {
+    console.log(`Indicate filled? ${Contentstate.indicateFilled}`);
     if (Contentstate.indicateFilled) {
       ScannerOutcome.filled.forEach((el) => {
         el.style.outline = "2px solid oklch(0.7941 0.1899 149.29)";
@@ -135,132 +136,134 @@
 
 <svelte:window onresize={resizeMoveDeb} />
 
-<!-- svelte-ignore a11y_no_static_element_interactions -->
-<div
-  bind:this={pane}
-  onmouseleave={hidePane}
-  data-theme="vdark"
-  data-font="serif"
-  class="inset-ring-secondary bubble pointer-events-none fixed top-0 left-0 z-1000 m-2 h-64 w-96 rounded-lg p-4 shadow-xl inset-ring-4"
-  style="opacity: 0;"
->
-  <div class="tabs tabs-lift size-full">
-    <label class="tab">
-      <input type="radio" name="input-buddy-menutabs" checked />
-      <Trophy class="mr-1" size={14} />
-      Most Likely
-    </label>
-    <div class="tab-content bg-base-100 border-base-200 p-4">
-      <ul class="menu row-span-4 size-full space-y-0.5">
-        {#if currentSuggestions}
-          {@const first = currentSuggestions?.first?.answer.value}
-          {@const second = currentSuggestions?.second?.answer.value}
-          {@const third = currentSuggestions?.third?.answer.value}
-          {#if first}
-            <li>
-              <button
-                class="btn btn-outline btn-secondary"
-                onclick={() => handleSuggestionClick(first)}
-              >
-                {first}
-              </button>
-            </li>
-          {/if}
-
-          {#if second}
-            <li>
-              <button
-                class="btn btn-outline btn-secondary"
-                onclick={() => handleSuggestionClick(second)}
-              >
-                {second}
-              </button>
-            </li>
-          {/if}
-
-          {#if third}
-            <li>
-              <button
-                class="btn btn-outline btn-secondary"
-                onclick={() => handleSuggestionClick(third)}
-              >
-                {third}
-              </button>
-            </li>
-          {/if}
-
-          {#if !first && !second && !third}
-            <li>
-              <div class="text-accent-content text-center text-sm italic">
-                No suggestions for this input!
-              </div>
-            </li>
-          {/if}
-        {/if}
-      </ul>
-    </div>
-
-    <label class="tab">
-      <input type="radio" name="input-buddy-menutabs" />
-      <SearchCode class="mr-1" size={14} />
-      Search Saved Answers
-    </label>
-    <div class="tab-content bg-base-100 border-base-200 px-4 py-2">
-      <div class="flex w-full flex-col">
-        <input
-          class="input input-sm active:input-secondary focus:input-secondary mt-3 w-full shrink-0"
-          placeholder="Start typing to search saved answers"
-          bind:value={query}
-        />
-        <button
-          disabled
-          class="mt-1 flex flex-row items-center justify-around px-4 font-mono opacity-75"
-        >
-          <span
-            class="text-accent-content text-shadow-secondary-content font-bolder col-span-2 text-base"
-          >
-            Label
-          </span>
-
-          <span class="text-accent-content col-span-2 mt-1 text-sm">
-            Answer
-          </span>
-        </button>
-
-        {#if Contentstate.answers.length === 0}
-          <div class="mt-4 text-xs text-neutral-500">
-            No answers yet. Add one above to get started.
-          </div>
-        {:else if matchingAnswers.length === 0}
-          <div class="mt-4 text-xs text-neutral-500">
-            No answers match your filter.
-          </div>
-        {:else}
-          <div class="mt-4 max-h-24 overflow-y-auto pr-1">
-            <div class="grid gap-3">
-              {#each matchingAnswers as answer (answer.id)}
+{#if Contentstate.floatingMenu}
+  <!-- svelte-ignore a11y_no_static_element_interactions -->
+  <div
+    bind:this={pane}
+    onmouseleave={hidePane}
+    data-theme="vdark"
+    data-font="serif"
+    class="inset-ring-secondary bubble pointer-events-none fixed top-0 left-0 z-1000 m-2 h-64 w-96 rounded-lg p-4 shadow-xl inset-ring-4"
+    style="opacity: 0;"
+  >
+    <div class="tabs tabs-lift size-full">
+      <label class="tab">
+        <input type="radio" name="input-buddy-menutabs" checked />
+        <Trophy class="mr-1" size={14} />
+        Most Likely
+      </label>
+      <div class="tab-content bg-base-100 border-base-200 p-4">
+        <ul class="menu row-span-4 size-full space-y-0.5">
+          {#if currentSuggestions}
+            {@const first = currentSuggestions?.first?.answer.value}
+            {@const second = currentSuggestions?.second?.answer.value}
+            {@const third = currentSuggestions?.third?.answer.value}
+            {#if first}
+              <li>
                 <button
-                  onclick={() => fillFromSaved(answer.value)}
-                  class="btn btn-secondary grid size-full h-10 cursor-pointer grid-cols-5 grid-rows-1"
+                  class="btn btn-outline btn-secondary"
+                  onclick={() => handleSuggestionClick(first)}
                 >
-                  <span
-                    class="text-secondary-content text-shadow-secondary-content col-span-2 text-base font-bold"
-                  >
-                    {answer.label}
-                  </span>
-                  <div class="divider divider-horizontal"></div>
-                  <span class="text-accent-content col-span-2 mt-1 text-sm">
-                    {answer.value}
-                  </span>
+                  {first}
                 </button>
-              {/each}
+              </li>
+            {/if}
+
+            {#if second}
+              <li>
+                <button
+                  class="btn btn-outline btn-secondary"
+                  onclick={() => handleSuggestionClick(second)}
+                >
+                  {second}
+                </button>
+              </li>
+            {/if}
+
+            {#if third}
+              <li>
+                <button
+                  class="btn btn-outline btn-secondary"
+                  onclick={() => handleSuggestionClick(third)}
+                >
+                  {third}
+                </button>
+              </li>
+            {/if}
+
+            {#if !first && !second && !third}
+              <li>
+                <div class="text-accent-content text-center text-sm italic">
+                  No suggestions for this input!
+                </div>
+              </li>
+            {/if}
+          {/if}
+        </ul>
+      </div>
+
+      <label class="tab">
+        <input type="radio" name="input-buddy-menutabs" />
+        <SearchCode class="mr-1" size={14} />
+        Search Saved Answers
+      </label>
+      <div class="tab-content bg-base-100 border-base-200 px-4 py-2">
+        <div class="flex w-full flex-col">
+          <input
+            class="input input-sm active:input-secondary focus:input-secondary mt-3 w-full shrink-0"
+            placeholder="Start typing to search saved answers"
+            bind:value={query}
+          />
+          <button
+            disabled
+            class="mt-1 flex flex-row items-center justify-around px-4 font-mono opacity-75"
+          >
+            <span
+              class="text-accent-content text-shadow-secondary-content font-bolder col-span-2 text-base"
+            >
+              Label
+            </span>
+
+            <span class="text-accent-content col-span-2 mt-1 text-sm">
+              Answer
+            </span>
+          </button>
+
+          {#if Contentstate.answers.length === 0}
+            <div class="mt-4 text-xs text-neutral-500">
+              No answers yet. Add one above to get started.
             </div>
-          </div>
-        {/if}
+          {:else if matchingAnswers.length === 0}
+            <div class="mt-4 text-xs text-neutral-500">
+              No answers match your filter.
+            </div>
+          {:else}
+            <div class="mt-4 max-h-24 overflow-y-auto pr-1">
+              <div class="grid gap-3">
+                {#each matchingAnswers as answer (answer.id)}
+                  <button
+                    onclick={() => fillFromSaved(answer.value)}
+                    class="btn btn-secondary grid size-full h-10 cursor-pointer grid-cols-5 grid-rows-1"
+                  >
+                    <span
+                      class="text-secondary-content text-shadow-secondary-content col-span-2 text-base font-bold"
+                    >
+                      {answer.label}
+                    </span>
+                    <div class="divider divider-horizontal"></div>
+                    <span class="text-accent-content col-span-2 mt-1 text-sm">
+                      {answer.value}
+                    </span>
+                  </button>
+                {/each}
+              </div>
+            </div>
+          {/if}
+        </div>
       </div>
     </div>
   </div>
-</div>
+{/if}
 
 <style>
   .bubble::after {

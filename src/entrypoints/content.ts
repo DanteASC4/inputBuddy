@@ -42,7 +42,7 @@ const getSyncedSettings = async (): Promise<Settings> => {
   return settings;
 };
 
-const mountFloatingMenu = async (ctx: ContentScriptContext) => {
+const mountInjectedMenu = async (ctx: ContentScriptContext) => {
   if (floatingMenu) return;
 
   floatingMenu = await createShadowRootUi(ctx, {
@@ -60,7 +60,7 @@ const mountFloatingMenu = async (ctx: ContentScriptContext) => {
   floatingMenu.mount();
 };
 
-const unmountFloatingMenu = () => {
+const unmountInjectedMenu = () => {
   floatingMenu?.remove();
   floatingMenu = null;
 };
@@ -103,7 +103,9 @@ const loadContentAnswers = async () => {
   const profile = (await getLastProfile()) ?? "default";
   Contentstate.profile = profile;
   Contentstate.answers = await getAnswers(profile);
-  Contentstate.indicateFilled = (await getSyncedSettings()).indicateFilled;
+  const synced = await getSyncedSettings();
+  Contentstate.indicateFilled = synced.indicateFilled;
+  Contentstate.floatingMenu = synced.floatingMenuEnabled;
 };
 
 let scanTimeout: number | null = null;
@@ -224,10 +226,10 @@ export default defineContentScript({
           await reloadAndRescan();
         }
 
-        if (settings.enabled && settings.floatingMenuEnabled) {
-          await mountFloatingMenu(ctx);
+        if (settings.enabled) {
+          await mountInjectedMenu(ctx);
         } else {
-          unmountFloatingMenu();
+          unmountInjectedMenu();
         }
         return;
       }
@@ -252,8 +254,8 @@ export default defineContentScript({
         startAuto();
       }
 
-      if (settings.enabled && settings.floatingMenuEnabled) {
-        await mountFloatingMenu(ctx);
+      if (settings.enabled) {
+        await mountInjectedMenu(ctx);
       }
     })();
   },
