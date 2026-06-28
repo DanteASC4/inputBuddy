@@ -100,7 +100,6 @@
   const resizeMoveDeb = debounce({ delay: 100 }, resizeMove);
 
   $effect(() => {
-    console.log(`Indicate filled? ${Contentstate.indicateFilled}`);
     if (Contentstate.indicateFilled) {
       ScannerOutcome.filled.forEach((el) => {
         el.style.outline = "2px solid oklch(0.7941 0.1899 149.29)";

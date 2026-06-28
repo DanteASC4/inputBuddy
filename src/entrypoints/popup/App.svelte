@@ -4,6 +4,7 @@
   import Profiles from "@c/Profiles.svelte";
   import ScanNowButton from "@c/ScanNowButton.svelte";
   import Settings from "@c/Settings.svelte";
+  import SimpleStats from "@c/SimpleStats.svelte";
   import { recommendedLabels } from "@u/data";
 
   import { Appstate } from "$lib/state.svelte";
@@ -25,7 +26,7 @@
   });
 </script>
 
-<main id="app" class="min-h-full w-full p-4 text-sm">
+<main class="min-h-full w-full p-4 text-sm">
   <header class="mb-4">
     <div class="text-xs font-bold tracking-[0.24em] uppercase">
       <span class="text-primary-content bg-primary rounded px-2">
@@ -41,6 +42,7 @@
   {#await ready}
     <p>Loading...</p>
   {:then}
+    <SimpleStats />
     <ScanNowButton />
     <AnswerForm suggestions={trueRecommendations} />
     <AnswerList />

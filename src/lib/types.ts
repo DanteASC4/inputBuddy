@@ -57,10 +57,13 @@ export type AppState = {
   isSaving: boolean;
   saveError: string;
   currentProfile: string;
+  inputsAutoFilled: number;
+  charactersAutoFilled: number;
   loadAnswers: (profile?: string) => Promise<void>;
   loadSettings: () => Promise<void>;
   loadProfiles: () => Promise<void>;
   loadLastProfile: () => Promise<void>;
+  loadSimpleStats: () => Promise<void>;
   init: () => Promise<true>;
   saveAnswer: (label: string, value: string, id?: string) => Promise<void>;
   removeAnswer: (id: string) => Promise<void>;

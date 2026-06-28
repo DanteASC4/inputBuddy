@@ -4,6 +4,8 @@ import {
   deleteProfile,
   getAnswerProfiles,
   getAnswers,
+  getCharsAutoFilled,
+  getInputsAutoFilled,
   getLastProfile,
   getSettings,
   saveNewProfile,
@@ -20,6 +22,8 @@ export const Appstate = $state({
   isSaving: false,
   saveError: "",
   currentProfile: "default",
+  inputsAutoFilled: 0,
+  charactersAutoFilled: 0,
   async loadAnswers(profile?: string) {
     this.answers = await getAnswers(profile ?? this.currentProfile);
   },
@@ -29,6 +33,10 @@ export const Appstate = $state({
   },
   async loadProfiles() {
     this.profiles = await getAnswerProfiles();
+  },
+  async loadSimpleStats() {
+    this.inputsAutoFilled = await getInputsAutoFilled();
+    this.charactersAutoFilled = await getCharsAutoFilled();
   },
   async loadLastProfile() {
     const lastProfile = await getLastProfile();
@@ -44,6 +52,7 @@ export const Appstate = $state({
       this.loadSettings(),
       this.loadProfiles(),
       this.loadLastProfile(),
+      this.loadSimpleStats(),
     ]);
     return true;
   },

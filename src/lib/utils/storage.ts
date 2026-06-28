@@ -21,6 +21,8 @@ const STORAGE_KEYS = {
   profiles: "profiles",
   settings: "settings",
   lastProfile: "lastProfile",
+  inputsAutoFilled: "inputsAutoFilled",
+  charactersAutoFilled: "charactersAutoFilled",
 } as const;
 
 const defaultAnswerProfiles = ["default"];
@@ -133,6 +135,53 @@ export const deleteProfile = async (profile: string): Promise<string[]> => {
 //   ███    ███ ███   ███    ▄█    ███ ███ ▄█▄ ███   ███    ███   ███    ███    ▄█    ███
 //   ███    █▀   ▀█   █▀   ▄████████▀   ▀███▀███▀    ██████████   ███    ███  ▄████████▀
 //                                                                ███    ███
+
+export const getInputsAutoFilled = async () => {
+  const inputsAutoFilled = await browser.storage.local.get(
+    STORAGE_KEYS.inputsAutoFilled,
+  );
+
+  const actual = inputsAutoFilled[STORAGE_KEYS.inputsAutoFilled];
+  if (!actual) {
+    await browser.storage.local.set({
+      [STORAGE_KEYS.inputsAutoFilled]: 0,
+    });
+    return 0;
+  }
+  return actual as number;
+};
+
+export const getCharsAutoFilled = async () => {
+  const charsAutoFilled = await browser.storage.local.get(
+    STORAGE_KEYS.charactersAutoFilled,
+  );
+  const actual = charsAutoFilled[STORAGE_KEYS.charactersAutoFilled];
+  if (!actual) {
+    await browser.storage.local.set({
+      [STORAGE_KEYS.charactersAutoFilled]: 0,
+    });
+    return 0;
+  }
+  return actual as number;
+};
+
+export const incrementInputsAutoFilled = async (count = 1) => {
+  const current = await getInputsAutoFilled();
+  const next = current + count;
+  await browser.storage.local.set({
+    [STORAGE_KEYS.inputsAutoFilled]: next,
+  });
+  return next;
+};
+
+export const incrementCharsAutoFilled = async (count = 1) => {
+  const current = await getCharsAutoFilled();
+  const next = current + count;
+  await browser.storage.local.set({
+    [STORAGE_KEYS.charactersAutoFilled]: next,
+  });
+  return next;
+};
 
 export const getAnswers = async (
   profile: string = "default",

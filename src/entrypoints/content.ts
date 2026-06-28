@@ -19,12 +19,19 @@ import "./app.css";
 import InjectedMenu from "@c/InjectedMenu.svelte";
 import { fillInput, getLabelCandidates, isEligibleInput } from "@u/eles";
 import { findBestAnswer } from "@u/matching";
-import { getAnswers, getLastProfile, getSettings } from "@u/storage";
+import {
+  getAnswers,
+  getLastProfile,
+  getSettings,
+  incrementCharsAutoFilled,
+  incrementInputsAutoFilled,
+} from "@u/storage";
 import { infoLog, setDebugLogging } from "@u/styled-log";
 import { mount, unmount } from "svelte";
 import { browser } from "wxt/browser";
 
 import { ContentScriptContext } from "#imports";
+import { Appstate } from "$lib/state.svelte";
 import { Contentstate, ScannerOutcome } from "$lib/stores/content.svelte";
 import type { Settings } from "$lib/types";
 
@@ -135,6 +142,9 @@ const scanAndFill = async () => {
     ),
   );
 
+  let inputsFilledThisScan = 0;
+  let charactersinputsFilledThisScan = 0;
+
   for (const element of inputs) {
     if (!isEligibleInput(element)) continue;
     if (element.value?.trim()) continue;
@@ -157,8 +167,15 @@ const scanAndFill = async () => {
     }
 
     fillInput(element, winners.first.answer.value);
+    charactersinputsFilledThisScan += winners.first.answer.value.length;
+    inputsFilledThisScan++;
 
     ScannerOutcome.filled.push(element);
+  }
+
+  if (inputsFilledThisScan > 0) {
+    await incrementInputsAutoFilled(inputsFilledThisScan);
+    await incrementCharsAutoFilled(charactersinputsFilledThisScan);
   }
 };
 

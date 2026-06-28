@@ -81,6 +81,7 @@ html,
 body,
 #app {
   scrollbar-width: none;
+  width: 400px;
 }
 
 body {
