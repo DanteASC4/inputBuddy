@@ -1,4 +1,4 @@
-import type { Answer, AppState, Settings } from "@types";
+import { type Answer, type AppState, DEFAULT_SETTINGS } from "@types";
 import {
   deleteAnswer,
   deleteProfile,
@@ -11,21 +11,12 @@ import {
   updateSettings,
   upsertAnswer,
 } from "@u/storage";
-import { infoLog } from "@u/styled-log";
+import { infoLog, setDebugLogging } from "@u/styled-log";
 
 export const Appstate = $state({
   answers: [] as Answer[],
   profiles: [] as string[],
-  settings: {
-    enabled: true,
-    autoFillEnabled: true,
-    floatingMenuEnabled: false,
-    matchMode: "partial",
-    fontStyle: "serif",
-    keepOpen: false,
-    debug: true,
-    indicateFilled: true,
-  } satisfies Settings,
+  settings: DEFAULT_SETTINGS,
   isSaving: false,
   saveError: "",
   currentProfile: "default",
@@ -34,6 +25,7 @@ export const Appstate = $state({
   },
   async loadSettings() {
     this.settings = await getSettings();
+    setDebugLogging(this.settings.debug);
   },
   async loadProfiles() {
     this.profiles = await getAnswerProfiles();
@@ -88,6 +80,7 @@ export const Appstate = $state({
 
     try {
       this.settings = await updateSettings(settings);
+      setDebugLogging(this.settings.debug);
     } catch (error) {
       console.error("Failed to update settings.", error);
       this.saveError = "Something went wrong while updating settings.";

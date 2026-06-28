@@ -2,7 +2,7 @@ export const recommendedLabels = [
   "First Name",
   "Last Name",
   "Email",
-  "LinkedI ",
+  "LinkedIn",
   "Github",
   "Website",
   "Address Line 1",

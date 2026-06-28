@@ -20,12 +20,13 @@ import InjectedMenu from "@c/InjectedMenu.svelte";
 import { fillInput, getLabelCandidates, isEligibleInput } from "@u/eles";
 import { findBestAnswer } from "@u/matching";
 import { getAnswers, getLastProfile, getSettings } from "@u/storage";
-import { infoLog } from "@u/styled-log";
+import { infoLog, setDebugLogging } from "@u/styled-log";
 import { mount, unmount } from "svelte";
 import { browser } from "wxt/browser";
 
 import { ContentScriptContext } from "#imports";
 import { Contentstate, ScannerOutcome } from "$lib/stores/content.svelte";
+import type { Settings } from "$lib/types";
 
 const INPUT_SELECTOR =
   'input[type="text"], input[type="email"], input[type="tel"], input[type="url"], input[type="search"], textarea';
@@ -34,6 +35,12 @@ const SCAN_DEBOUNCE_MS = 250;
 const PARTIAL_MATCH_THRESHOLD = 0.65;
 
 let floatingMenu: Awaited<ReturnType<typeof createShadowRootUi>> | null = null;
+
+const getSyncedSettings = async (): Promise<Settings> => {
+  const settings = await getSettings();
+  setDebugLogging(settings.debug);
+  return settings;
+};
 
 const mountFloatingMenu = async (ctx: ContentScriptContext) => {
   if (floatingMenu) return;
@@ -86,7 +93,7 @@ const resetScanState = () => {
 const reloadAndRescan = async () => {
   await loadContentAnswers();
   resetScanState();
-  const settings = await getSettings();
+  const settings = await getSyncedSettings();
   if (settings.enabled && settings.autoFillEnabled) {
     scheduleScan();
   }
@@ -96,7 +103,7 @@ const loadContentAnswers = async () => {
   const profile = (await getLastProfile()) ?? "default";
   Contentstate.profile = profile;
   Contentstate.answers = await getAnswers(profile);
-  Contentstate.indicateFilled = (await getSettings()).indicateFilled;
+  Contentstate.indicateFilled = (await getSyncedSettings()).indicateFilled;
 };
 
 let scanTimeout: number | null = null;
@@ -109,7 +116,7 @@ const scheduleScan = () => {
 };
 
 const scanAndFill = async () => {
-  const settings = await getSettings();
+  const settings = await getSyncedSettings();
   if (!settings.enabled) return;
 
   infoLog("Got settings:", settings);
@@ -201,7 +208,7 @@ export default defineContentScript({
     browser.storage.onChanged.addListener(async (changes, areaName) => {
       if (areaName !== "local") return;
 
-      const settings = await getSettings();
+      const settings = await getSyncedSettings();
       const activeProfile = (await getLastProfile()) ?? "default";
       const settingsChanged = "settings" in changes;
       const profileChanged = "profiles" in changes || "lastProfile" in changes;
@@ -240,7 +247,7 @@ export default defineContentScript({
     });
 
     (async () => {
-      const settings = await getSettings();
+      const settings = await getSyncedSettings();
       if (settings.enabled && settings.autoFillEnabled) {
         startAuto();
       }
