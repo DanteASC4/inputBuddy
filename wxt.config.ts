@@ -7,13 +7,33 @@ import { defineConfig } from "wxt";
 export default defineConfig({
   srcDir: "src",
   modules: ["@wxt-dev/module-svelte", "@wxt-dev/auto-icons"],
-  manifest: {
-    name: "Input Buddy",
-    author: { email: "zexovon@gmail.com" },
-    license: "GPL-3.0-or-later",
-    description: `InputBuddy aims to remove repetitive typing from forms. Save common label + answer pairs and InputBuddy will auto-fill them.`,
-    permissions: ["storage", "tabs"],
-    host_permissions: ["<all_urls>"],
+  manifest: ({ browser }) => {
+    if (browser === "chrome") {
+      return {
+        name: "Input Buddy",
+        author: { email: "zexovon@gmail.com" },
+        license: "GPL-3.0-or-later",
+        description: `InputBuddy aims to remove repetitive typing from forms. Save common label + answer pairs and InputBuddy will auto-fill them.`,
+        permissions: ["storage", "tabs"],
+        host_permissions: ["<all_urls>"],
+      };
+    } else if (browser === "firefox") {
+      return {
+        name: "Input Buddy",
+        author: "Dante R",
+        license: "GPL-3.0-or-later",
+        description: `InputBuddy aims to remove repetitive typing from forms. Save common label + answer pairs and InputBuddy will auto-fill them.`,
+        permissions: ["storage", "tabs"],
+        host_permissions: ["<all_urls>"],
+        browser_specific_settings: {
+          gecko: {
+            data_collection_permissions: {
+              required: ["personallyIdentifyingInfo", "websiteContent"],
+            },
+          },
+        },
+      };
+    }
   },
   vite: () => ({
     plugins: [tailwindcss()],
