@@ -6,7 +6,16 @@
 
 A free & open source extension for your convenience.
 
-[Install via the Chrome web store](https://chromewebstore.google.com/detail/ldbpijapdbfmmokfcfobijndliaoeoal?utm_source=item-share-cb)
+**Install**
+
+You can install via either of the major browser extension stores:
+
+- [![chrome logo](./extra_images/chrome.png) Chrome Webstore](https://chromewebstore.google.com/detail/ldbpijapdbfmmokfcfobijndliaoeoal?utm_source=item-share-cb)
+- [![firefox logo](./extra_images/firefox.png) Firefox Addon Store](https://addons.mozilla.org/en-US/firefox/addon/input-buddy/)
+
+---
+
+**Table of Contents**
 
 - [InputBuddy](#inputbuddy)
 - [What \& Why?](#what--why)
